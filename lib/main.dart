@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'views/login_view.dart';
+import 'views/home_view.dart';
 
 void main() {
   runApp(const ParkingApp());
@@ -17,7 +18,11 @@ class ParkingApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
-      home: const LoginView(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const LoginView(),
+        '/home': (context) => const HomeView(),
+      },
     );
   }
 }
