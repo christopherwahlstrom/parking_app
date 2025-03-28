@@ -6,7 +6,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 void main(List<String> args) async {
-  final ip = InternetAddress.anyIPv4;
+  final ip = InternetAddress('0.0.0.0');
 
   Router router = ServerConfig.instance.router;
 
