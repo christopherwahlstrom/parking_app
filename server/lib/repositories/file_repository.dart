@@ -25,7 +25,7 @@ abstract class FileRepository<T> implements RepositoryInterface<T> {
     return jsonList.map((json) => fromJson(json)).toList();
   }
 
-  Future<void> writeFile(List<T> entities) async {  // 🔥 "vehicles" -> "entities"
+  Future<void> writeFile(List<T> entities) async {
     final file = File(filePath);
     final jsonList = entities.map((entity) => toJson(entity)).toList();
     await file.writeAsString(jsonEncode(jsonList));

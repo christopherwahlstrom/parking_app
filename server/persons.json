@@ -1,1 +1,9 @@
-[{"namn":"Stig","personnummer":"700101","vehiclesIds":["ba5e81a6-352f-420a-b226-87bf61dfc4dd"],"id":"95fcc573-add3-4757-b903-e9df8b287506"}]
+[
+     {
+       "name": "Stig",
+       "personalNumber": "700101",
+       "vehicleIds": ["ba5e81a6-352f-420a-b226-87bf61dfc4dd"],
+       "id": "95fcc573-add3-4757-b903-e9df8b287506"
+     }
+]
+   

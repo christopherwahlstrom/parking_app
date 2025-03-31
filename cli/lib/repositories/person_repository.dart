@@ -26,7 +26,7 @@ class PersonRepository implements RepositoryInterface<Person> {
 
   @override
   Future<Person> getById(String id) async {
-    final uri = Uri.parse("http://localhost:8080/persons/${id}");
+    final uri = Uri.parse("http://localhost:8080/persons/$id");
 
     Response response = await http.get(
       uri,
@@ -61,7 +61,7 @@ class PersonRepository implements RepositoryInterface<Person> {
 
   @override
   Future<Person> delete(String id) async {
-    final uri = Uri.parse("http://localhost:8080/persons/${id}");
+    final uri = Uri.parse("http://localhost:8080/persons/$id");
 
     Response response = await http.delete(
       uri,
@@ -79,7 +79,7 @@ class PersonRepository implements RepositoryInterface<Person> {
 
   @override
   Future<Person> update(String id, Person person) async {
-    final uri = Uri.parse("http://localhost:8080/persons/${id}");
+    final uri = Uri.parse("http://localhost:8080/persons/$id");
 
     Response response = await http.put(
       uri,

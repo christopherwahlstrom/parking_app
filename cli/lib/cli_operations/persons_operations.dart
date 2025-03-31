@@ -13,13 +13,13 @@ class PersonsOperations {
     print('Enter name: ');
     var name = stdin.readLineSync();
 
-    print('Enter personnummer: ');
-    var personnummer = stdin.readLineSync();
+    print('Enter personalNumber: ');
+    var personalNumber = stdin.readLineSync();
 
-    if (Validator.isString(name) && Validator.isString(personnummer)) {
+    if (Validator.isString(name) && Validator.isString(personalNumber)) {
       Person person = Person(
-        namn: name!,
-        personnummer: personnummer!,
+        name: name!,
+        personalNumber: personalNumber!,
         vehicles: [],
       );
       await repository.create(person);
@@ -33,7 +33,7 @@ class PersonsOperations {
     List<Person> allPersons = await repository.getAll();
     for (int i = 0; i < allPersons.length; i++) {
       print(
-          '${i + 1}. ${allPersons[i].namn} - ${allPersons[i].personnummer} - [${allPersons[i].vehicles.map((e) => e.registreringsnummer).join(', ')}]');
+          '${i + 1}. ${allPersons[i].name} - ${allPersons[i].personalNumber} - [${allPersons[i].vehicles.map((e) => e.registrationNumber).join(', ')}]');
     }
   }
 
@@ -41,7 +41,7 @@ class PersonsOperations {
     print('Pick an index to update: ');
     List<Person> allPersons = await repository.getAll();
     for (int i = 0; i < allPersons.length; i++) {
-      print('${i + 1}. ${allPersons[i].namn} - ${allPersons[i].personnummer}');
+      print('${i + 1}. ${allPersons[i].name} - ${allPersons[i].personalNumber}');
     }
 
     String? input = stdin.readLineSync();
@@ -55,7 +55,7 @@ class PersonsOperations {
         Person person = await repository.getById(allPersons[index].id);
 
         print(
-            "What would you like to update in person: ${person.namn} - ${person.personnummer} - [${person.vehicles.map((e) => e.registreringsnummer).join(", ")}]?");
+            "What would you like to update in person: ${person.name} - ${person.personalNumber} - [${person.vehicles.map((e) => e.registrationNumber).join(", ")}]?");
         print('1. Update Name');
         print('2. Add vehicle to person');
         print('3. Remove vehicle from person');
@@ -97,7 +97,7 @@ class PersonsOperations {
     var name = stdin.readLineSync();
 
     if (Validator.isString(name)) {
-      person.namn = name!;
+      person.name = name!;
       await repository.update(person.id, person);
       print('Person updated');
     } else {
@@ -111,7 +111,7 @@ class PersonsOperations {
     print('Pick a vehicle to add: ');
 
     for (int i = 0; i < allVehicles.length; i++) {
-      print('${i + 1}. ${allVehicles[i].registreringsnummer}');
+      print('${i + 1}. ${allVehicles[i].registrationNumber}');
     }
 
     var input = stdin.readLineSync();
@@ -129,7 +129,7 @@ class PersonsOperations {
   static Future _removeVehiclesFromPerson(Person person) async {
     print('Pick a vehicle to remove: ');
     for (int i = 0; i < person.vehicles.length; i++) {
-      print('${i + 1}. ${person.vehicles[i].registreringsnummer}');
+      print('${i + 1}. ${person.vehicles[i].registrationNumber}');
     }
 
     String? input = stdin.readLineSync();
@@ -148,7 +148,7 @@ class PersonsOperations {
     print('Pick an index to delete: ');
     List<Person> allPersons = await repository.getAll();
     for (int i = 0; i < allPersons.length; i++) {
-      print('${i + 1}. ${allPersons[i].namn} - ${allPersons[i].personnummer}');
+      print('${i + 1}. ${allPersons[i].name} - ${allPersons[i].personalNumber}');
     }
 
     String? input = stdin.readLineSync();

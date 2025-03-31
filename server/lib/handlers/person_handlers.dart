@@ -26,15 +26,14 @@ Future<Response> postPersonHandler(Request request) async {
 Future<Response> getPersonsHandler(Request request) async {
   final entities = await repo.getAll();
 
-  final persons = await Future.wait(entities.map((e) => e.toModel()));
-
-  final payload = persons.map((e) => e.toJson()).toList();
+  final payload = entities.map((e) => e.toJson()).toList();
 
   return Response.ok(
     jsonEncode(payload),
     headers: {'Content-Type': 'application/json'},
   );
 }
+
 
 Future<Response> getPersonHandler(Request request) async {
   String? id = request.params["id"];

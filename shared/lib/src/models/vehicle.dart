@@ -1,22 +1,22 @@
 import 'package:uuid/uuid.dart';
 
 class Vehicle {
-  String registreringsnummer;
-  String typ;
+  String registrationNumber;
+  String type;
   String ownerId;
   String id;
 
   Vehicle({
-    required this.registreringsnummer,
-    required this.typ,
+    required this.registrationNumber,
+    required this.type,
     required this.ownerId,
     String? id,
   }) : id = id ?? Uuid().v4();
 
   factory Vehicle.fromJson(Map<String, dynamic> json) {
     return Vehicle(
-      registreringsnummer: json['registreringsnummer'],
-      typ: json['typ'],
+      registrationNumber: json['registrationNumber'],
+      type: json['type'],
       ownerId: json['ownerId'],
       id: json['id'],
     );
@@ -24,8 +24,8 @@ class Vehicle {
 
   Map<String, dynamic> toJson() {
     return {
-      'registreringsnummer': registreringsnummer,
-      'typ': typ,
+      'registrationNumber': registrationNumber,
+      'type': type,
       'ownerId': ownerId,
       'id': id,
     };

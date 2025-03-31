@@ -10,20 +10,20 @@ PersonRepository personRepository = PersonRepository();
 
 class VehiclesOperations {
   static Future create() async {
-    print('Enter registreringsnummer: ');
-    var registreringsnummer = stdin.readLineSync();
+    print('Enter registrationNumber: ');
+    var registrationNumber = stdin.readLineSync();
 
-    print('Enter typ (car, motorcycle, etc.): ');
-    var typ = stdin.readLineSync();
+    print('Enter type (car, motorcycle, etc.): ');
+    var type = stdin.readLineSync();
 
-    print('Enter owner personnummer: ');
-    var ownerPersonnummer = stdin.readLineSync();
+    print('Enter owner personalNumber: ');
+    var ownerPersonalNumber = stdin.readLineSync();
 
-    if (Validator.isString(registreringsnummer) && Validator.isString(typ) && Validator.isString(ownerPersonnummer)) {
+    if (Validator.isString(registrationNumber) && Validator.isString(type) && Validator.isString(ownerPersonalNumber)) {
       List<Person> allPersons = await personRepository.getAll();
       Person? owner;
       try {
-        owner = allPersons.firstWhere((person) => person.personnummer == ownerPersonnummer);
+        owner = allPersons.firstWhere((person) => person.personalNumber == ownerPersonalNumber);
       } catch (e) {
         owner = null;
       }
@@ -34,8 +34,8 @@ class VehiclesOperations {
       }
 
       Vehicle vehicle = Vehicle(
-        registreringsnummer: registreringsnummer!,
-        typ: typ!,
+        registrationNumber: registrationNumber!,
+        type: type!,
         ownerId: owner.id,
       );
 
@@ -58,9 +58,9 @@ class VehiclesOperations {
         owner = null;
       }
       if (owner != null) {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: ${owner.namn}');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: ${owner.name}');
       } else {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: Not found');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: Not found');
       }
     }
   }
@@ -76,9 +76,9 @@ class VehiclesOperations {
         owner = null;
       }
       if (owner != null) {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: ${owner.namn}');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: ${owner.name}');
       } else {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: Not found');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: Not found');
       }
     }
 
@@ -88,20 +88,20 @@ class VehiclesOperations {
       int index = int.parse(input!) - 1;
       Vehicle vehicle = allVehicles[index];
 
-      print('Enter new registreringsnummer: ');
-      var registreringsnummer = stdin.readLineSync();
+      print('Enter new registrationNumber: ');
+      var registrationNumber = stdin.readLineSync();
 
-      print('Enter new typ (car, motorcycle, etc.): ');
-      var typ = stdin.readLineSync();
+      print('Enter new type (car, motorcycle, etc.): ');
+      var type = stdin.readLineSync();
 
-      print('Enter new owner personnummer: ');
-      var ownerPersonnummer = stdin.readLineSync();
+      print('Enter new owner personalNumber: ');
+      var ownerPersonalNumber = stdin.readLineSync();
 
-      if (Validator.isString(registreringsnummer) && Validator.isString(typ) && Validator.isString(ownerPersonnummer)) {
+      if (Validator.isString(registrationNumber) && Validator.isString(type) && Validator.isString(ownerPersonalNumber)) {
         List<Person> allPersons = await personRepository.getAll();
         Person? owner;
         try {
-          owner = allPersons.firstWhere((person) => person.personnummer == ownerPersonnummer);
+          owner = allPersons.firstWhere((person) => person.personalNumber == ownerPersonalNumber);
         } catch (e) {
           owner = null;
         }
@@ -111,8 +111,8 @@ class VehiclesOperations {
           return;
         }
 
-        vehicle.registreringsnummer = registreringsnummer!;
-        vehicle.typ = typ!;
+        vehicle.registrationNumber = registrationNumber!;
+        vehicle.type = type!;
         vehicle.ownerId = owner.id;
 
         await vehicleRepository.update(vehicle.id, vehicle);
@@ -136,9 +136,9 @@ class VehiclesOperations {
         owner = null;
       }
       if (owner != null) {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: ${owner.namn}');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: ${owner.name}');
       } else {
-        print('${i + 1}. ${allVehicles[i].registreringsnummer} - ${allVehicles[i].typ} - Owner: Not found');
+        print('${i + 1}. ${allVehicles[i].registrationNumber} - ${allVehicles[i].type} - Owner: Not found');
       }
     }
 
