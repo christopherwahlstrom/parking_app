@@ -33,6 +33,7 @@ class _HomeViewState extends State<HomeView> {
       widget.person.vehicleIds.map((id) => service.getVehicleById(id)),
     );
 
+    if (!mounted) return;
     setState(() {
       vehicles = loadedVehicles.whereType<Vehicle>().toList();
       isLoading = false;
@@ -44,6 +45,7 @@ class _HomeViewState extends State<HomeView> {
     final type = _typeController.text.trim();
 
     if (registration.isEmpty || type.isEmpty) {
+      if (!mounted) return;
       SnackBarService.showError(context, 'Alla fält måste fyllas i');
       return;
     }
@@ -58,10 +60,12 @@ class _HomeViewState extends State<HomeView> {
     widget.person.vehicleIds.add(createdVehicle.id);
     await PersonService().updatePerson(widget.person);
 
+    if (!mounted) return;
     _regController.clear();
     _typeController.clear();
     Navigator.pop(context);
 
+    if (!mounted) return;
     SnackBarService.showSuccess(context, 'Fordon tillagt');
     _loadVehicles();
   }
@@ -70,6 +74,7 @@ class _HomeViewState extends State<HomeView> {
     await VehicleService().deleteVehicle(vehicleId);
     widget.person.vehicleIds.remove(vehicleId);
     await PersonService().updatePerson(widget.person);
+    if (!mounted) return;
     _loadVehicles();
     SnackBarService.showSuccess(context, 'Fordon borttaget');
   }
