@@ -1,4 +1,3 @@
-import 'package:server/repositories/vehicle_repository.dart';
 import 'package:shared/shared.dart';
 
 class PersonEntity {
@@ -15,14 +14,13 @@ class PersonEntity {
   });
 
   factory PersonEntity.fromJson(Map<String, dynamic> json) {
-    print('👀 Parsing person JSON: $json'); // Debug-utskrift
-  return PersonEntity(
-    name: json['name'] ?? 'Unknown',
-    personalNumber: json['personalNumber'] ?? 'Unknown',
-    id: json['id'] ?? 'Unknown',
-    vehicleIds: List<String>.from(json['vehicleIds'] ?? []), 
-  );
-}
+    return PersonEntity(
+      name: json['name'] ?? 'Unknown',
+      personalNumber: json['personalNumber'] ?? 'Unknown',
+      id: json['id'] ?? 'Unknown',
+      vehicleIds: List<String>.from(json['vehicleIds'] ?? []),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,13 +32,10 @@ class PersonEntity {
   }
 
   Future<Person> toModel() async {
-    final vehicles = await Future.wait(
-      vehicleIds.map((id) => VehicleRepository().getById(id)),
-    );
     return Person(
       name: name,
       personalNumber: personalNumber,
-      vehicles: vehicles.whereType<Vehicle>().toList(),
+      vehicleIds: vehicleIds,
       id: id,
     );
   }
@@ -51,7 +46,7 @@ extension EntityConversion on Person {
     return PersonEntity(
       name: name,
       personalNumber: personalNumber,
-      vehicleIds: vehicles.map((vehicle) => vehicle.id).toList(),
+      vehicleIds: vehicleIds,
       id: id,
     );
   }

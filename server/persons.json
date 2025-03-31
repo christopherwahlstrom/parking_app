@@ -1,9 +1,1 @@
-[
-     {
-       "name": "Stig",
-       "personalNumber": "700101",
-       "vehicleIds": ["ba5e81a6-352f-420a-b226-87bf61dfc4dd"],
-       "id": "95fcc573-add3-4757-b903-e9df8b287506"
-     }
-]
-   
+[{"name":"Stig","personalNumber":"700101","vehicleIds":["ba5e81a6-352f-420a-b226-87bf61dfc4dd","86a738b2-040b-4b69-9a2b-8edf9fe34a9c"],"id":"95fcc573-add3-4757-b903-e9df8b287506"},{"name":"Claes","personalNumber":"750101","vehicleIds":["a7f69448-e3d1-4b6a-bfb0-2955c1aa5833","38ae456b-21b6-4759-8db6-a94cf61759d4"],"id":"95fcc573-add3-4757-b903-e9df8b287505"}]

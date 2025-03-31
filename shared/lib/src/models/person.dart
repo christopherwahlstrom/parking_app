@@ -1,22 +1,24 @@
 import 'package:uuid/uuid.dart';
-import 'vehicle.dart';
 
 class Person {
   String name;
   String personalNumber;
-  List<Vehicle> vehicles;
+  List<String> vehicleIds;
   String id;
 
-  Person({required this.name, required this.personalNumber, List<Vehicle>? vehicles, String? id})
-      : vehicles = vehicles ?? [],
+  Person({
+    required this.name,
+    required this.personalNumber,
+    List<String>? vehicleIds,
+    String? id,
+  })  : vehicleIds = vehicleIds ?? [],
         id = id ?? Uuid().v4();
-
 
   factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
       name: json['name'],
       personalNumber: json['personalNumber'],
-      vehicles: (json['vehicles'] as List).map((e) => Vehicle.fromJson(e)).toList(),
+      vehicleIds: List<String>.from(json['vehicleIds'] ?? []),
       id: json['id'],
     );
   }
@@ -25,7 +27,7 @@ class Person {
     return {
       "name": name,
       "personalNumber": personalNumber,
-      "vehicles": vehicles.map((e) => e.toJson()).toList(),
+      "vehicleIds": vehicleIds,
       "id": id,
     };
   }

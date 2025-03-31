@@ -1,5 +1,5 @@
+// Uppdaterad persons_operations.dart med vehicleIds
 import 'dart:io';
-
 import 'package:cli/repositories/person_repository.dart';
 import 'package:cli/repositories/vehicle_repository.dart';
 import 'package:cli/utils/validator.dart';
@@ -20,7 +20,7 @@ class PersonsOperations {
       Person person = Person(
         name: name!,
         personalNumber: personalNumber!,
-        vehicles: [],
+        vehicleIds: [],
       );
       await repository.create(person);
       print('Person created');
@@ -33,7 +33,7 @@ class PersonsOperations {
     List<Person> allPersons = await repository.getAll();
     for (int i = 0; i < allPersons.length; i++) {
       print(
-          '${i + 1}. ${allPersons[i].name} - ${allPersons[i].personalNumber} - [${allPersons[i].vehicles.map((e) => e.registrationNumber).join(', ')}]');
+          '${i + 1}. ${allPersons[i].name} - ${allPersons[i].personalNumber} - [${allPersons[i].vehicleIds.join(', ')}]');
     }
   }
 
@@ -55,7 +55,7 @@ class PersonsOperations {
         Person person = await repository.getById(allPersons[index].id);
 
         print(
-            "What would you like to update in person: ${person.name} - ${person.personalNumber} - [${person.vehicles.map((e) => e.registrationNumber).join(", ")}]?");
+            "Update: ${person.name} - ${person.personalNumber} - [${person.vehicleIds.join(', ')}]");
         print('1. Update Name');
         print('2. Add vehicle to person');
         print('3. Remove vehicle from person');
@@ -81,11 +81,9 @@ class PersonsOperations {
         } else {
           print('Invalid input');
         }
-        print("Would you like to update anything else? (y/n)");
+        print("Update more? (y/n)");
         input = stdin.readLineSync();
-        if (input == 'n') {
-          break;
-        }
+        if (input == 'n') break;
       }
     } else {
       print('Invalid input');
@@ -106,7 +104,6 @@ class PersonsOperations {
   }
 
   static Future _addVehicleToPerson(Person person) async {
-
     var allVehicles = await vehicleRepository.getAll();
     print('Pick a vehicle to add: ');
 
@@ -118,7 +115,7 @@ class PersonsOperations {
 
     if (Validator.isIndex(input, allVehicles)) {
       int index = int.parse(input!) - 1;
-      person.vehicles.add(allVehicles[index]);
+      person.vehicleIds.add(allVehicles[index].id);
       await repository.update(person.id, person);
       print('Vehicle added to person');
     } else {
@@ -128,15 +125,15 @@ class PersonsOperations {
 
   static Future _removeVehiclesFromPerson(Person person) async {
     print('Pick a vehicle to remove: ');
-    for (int i = 0; i < person.vehicles.length; i++) {
-      print('${i + 1}. ${person.vehicles[i].registrationNumber}');
+    for (int i = 0; i < person.vehicleIds.length; i++) {
+      print('${i + 1}. ${person.vehicleIds[i]}');
     }
 
     String? input = stdin.readLineSync();
 
-    if (Validator.isIndex(input, person.vehicles)) {
+    if (Validator.isIndex(input, person.vehicleIds)) {
       int index = int.parse(input!) - 1;
-      person.vehicles.removeAt(index);
+      person.vehicleIds.removeAt(index);
       await repository.update(person.id, person);
       print('Vehicle removed from person');
     } else {

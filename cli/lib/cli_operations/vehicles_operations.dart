@@ -40,7 +40,7 @@ class VehiclesOperations {
       );
 
       await vehicleRepository.create(vehicle);
-      owner.vehicles.add(vehicle);
+      owner.vehicleIds.add(vehicle.id);
       await personRepository.update(owner.id, owner);
       print('Vehicle created and linked to owner');
     } else {
