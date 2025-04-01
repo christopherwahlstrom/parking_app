@@ -1,9 +1,12 @@
+// home_view.dart
 import 'package:flutter/material.dart';
 import '../models/person.dart';
 import '../models/vehicle.dart';
 import '../services/vehicle_service.dart';
 import '../services/person_service.dart';
 import '../utils/snackbar_service.dart';
+import '../widgets/add_vehicle_modal.dart';
+import '../widgets/edit_vehicle_modal.dart';
 
 class HomeView extends StatefulWidget {
   final Person person;
@@ -17,9 +20,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   List<Vehicle> vehicles = [];
   bool isLoading = true;
-
-  final _regController = TextEditingController();
-  final _typeController = TextEditingController();
 
   @override
   void initState() {
@@ -40,37 +40,27 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  Future<void> _addVehicle() async {
-    final registration = _regController.text.trim();
-    final type = _typeController.text.trim();
-
-    if (registration.isEmpty || type.isEmpty) {
-      if (!mounted) return;
-      SnackBarService.showError(context, 'Alla fält måste fyllas i');
-      return;
-    }
-
-    final newVehicle = Vehicle(
-      registrationNumber: registration,
-      type: type,
-      ownerId: widget.person.id,
+  Future<void> _deleteVehicle(String vehicleId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Bekräfta radering'),
+        content: const Text('Är du säker på att du vill ta bort detta fordon?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Avbryt'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Ta bort'),
+          ),
+        ],
+      ),
     );
 
-    final createdVehicle = await VehicleService().createVehicle(newVehicle);
-    widget.person.vehicleIds.add(createdVehicle.id);
-    await PersonService().updatePerson(widget.person);
+    if (confirmed != true) return;
 
-    if (!mounted) return;
-    _regController.clear();
-    _typeController.clear();
-    Navigator.pop(context);
-
-    if (!mounted) return;
-    SnackBarService.showSuccess(context, 'Fordon tillagt');
-    _loadVehicles();
-  }
-
-  Future<void> _deleteVehicle(String vehicleId) async {
     await VehicleService().deleteVehicle(vehicleId);
     widget.person.vehicleIds.remove(vehicleId);
     await PersonService().updatePerson(widget.person);
@@ -79,59 +69,47 @@ class _HomeViewState extends State<HomeView> {
     SnackBarService.showSuccess(context, 'Fordon borttaget');
   }
 
+  void _editVehicle(Vehicle vehicle) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => EditVehicleModal(
+        vehicle: vehicle,
+        onSaved: () {
+          Navigator.pop(context);
+          _loadVehicles();
+        },
+      ),
+    );
+  }
+
+  void _showAddVehicleModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => AddVehicleModal(
+        person: widget.person,
+        onSaved: () {
+          Navigator.pop(context);
+          _loadVehicles();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                      top: 16,
-                      left: 16,
-                      right: 16,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Lägg till fordon',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _regController,
-                          decoration: const InputDecoration(
-                            labelText: 'Registreringsnummer',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _typeController,
-                          decoration: const InputDecoration(
-                            labelText: 'Fordonstyp',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: _addVehicle,
-                          child: const Text('Spara'),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+              onPressed: _showAddVehicleModal,
               child: const Icon(Icons.add),
               tooltip: 'Lägg till fordon',
             ),
@@ -140,14 +118,11 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Namn: ${widget.person.name}',
-                      style: Theme.of(context).textTheme.titleLarge),
+                  Text('Namn: ${widget.person.name}', style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 8),
-                  Text('Personnummer: ${widget.person.personalNumber}',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text('Personnummer: ${widget.person.personalNumber}', style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 16),
-                  Text('Dina fordon:',
-                      style: Theme.of(context).textTheme.titleMedium),
+                  Text('Dina fordon:', style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
                   Expanded(
                     child: ListView.builder(
@@ -158,10 +133,20 @@ class _HomeViewState extends State<HomeView> {
                           child: ListTile(
                             title: Text('Registreringsnummer: ${vehicle.registrationNumber}'),
                             subtitle: Text('Fordonstyp: ${vehicle.type}'),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteVehicle(vehicle.id),
-                              tooltip: 'Ta bort',
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.blue),
+                                  tooltip: 'Redigera',
+                                  onPressed: () => _editVehicle(vehicle),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  tooltip: 'Ta bort',
+                                  onPressed: () => _deleteVehicle(vehicle.id),
+                                ),
+                              ],
                             ),
                           ),
                         );
@@ -174,3 +159,4 @@ class _HomeViewState extends State<HomeView> {
           );
   }
 }
+

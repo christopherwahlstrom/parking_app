@@ -29,6 +29,18 @@ class VehicleService {
     }
   }
 
+  Future<void> updateVehicle(Vehicle vehicle) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/${vehicle.id}'),
+      body: jsonEncode(vehicle.toJson()),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Kunde inte uppdatera fordon');
+    }
+  }
+
   Future<void> deleteVehicle(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl/$id'));
     if (response.statusCode != 200) {
