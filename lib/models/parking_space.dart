@@ -5,11 +5,8 @@ class ParkingSpace {
   String adress;
   double prisPerTimme;
 
-  ParkingSpace({
-    required this.adress,
-    required this.prisPerTimme,
-    String? id,
-  }) : id = id ?? Uuid().v4();
+  ParkingSpace({required this.adress, required this.prisPerTimme, String? id})
+    : id = id ?? Uuid().v4();
 
   factory ParkingSpace.fromJson(Map<String, dynamic> json) {
     return ParkingSpace(
@@ -20,10 +17,6 @@ class ParkingSpace {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'adress': adress,
-      'prisPerTimme': prisPerTimme,
-    };
+    return {'id': id, 'adress': adress, 'prisPerTimme': prisPerTimme};
   }
 }

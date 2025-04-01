@@ -34,8 +34,8 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   Widget build(BuildContext context) {
     final views = [
       HomeView(person: widget.person),
-      const ParkingView(),
-      const HistoryView(),
+      ParkingView(personId: widget.person.id),
+      HistoryView(personId: widget.person.id),
     ];
 
     return Scaffold(

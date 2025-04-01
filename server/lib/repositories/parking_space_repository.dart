@@ -23,7 +23,7 @@ class ParkingSpaceRepository extends FileRepository<ParkingSpaceEntity> {
 
   @override
   Future<List<ParkingSpaceEntity>> getAll() async {
-    final file = File(filePath); 
+    final file = File(filePath);
     if (!await file.exists()) {
       return [];
     }

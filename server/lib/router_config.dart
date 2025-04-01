@@ -19,25 +19,25 @@ class ServerConfig {
     router = Router();
 
     // Person routes
-    router.post('/persons', postPersonHandler); 
-    router.get('/persons', getPersonsHandler); 
-    router.get('/persons/<id>', getPersonHandler); 
-    router.put('/persons/<id>', updatePersonHandler); 
-    router.delete('/persons/<id>', deletePersonHandler); 
+    router.post('/persons', postPersonHandler);
+    router.get('/persons', getPersonsHandler);
+    router.get('/persons/<id>', getPersonHandler);
+    router.put('/persons/<id>', updatePersonHandler);
+    router.delete('/persons/<id>', deletePersonHandler);
 
     // Vehicle routes
-    router.post('/vehicles', postVehicleHandler); 
-    router.get('/vehicles', getVehiclesHandler); 
-    router.get('/vehicles/<id>', getVehicleByIdHandler); 
-    router.put('/vehicles/<id>', updateVehicleHandler); 
-    router.delete('/vehicles/<id>', deleteVehicleHandler); 
+    router.post('/vehicles', postVehicleHandler);
+    router.get('/vehicles', getVehiclesHandler);
+    router.get('/vehicles/<id>', getVehicleByIdHandler);
+    router.put('/vehicles/<id>', updateVehicleHandler);
+    router.delete('/vehicles/<id>', deleteVehicleHandler);
 
     // ParkingSpace routes
-    router.post('/parkingspaces', postParkingSpaceHandler);
-    router.get('/parkingspaces', getParkingSpacesHandler);
-    router.get('/parkingspaces/<id>', getParkingSpaceByIdHandler);
-    router.put('/parkingspaces/<id>', updateParkingSpaceHandler);
-    router.delete('/parkingspaces/<id>', deleteParkingSpaceHandler);
+    router.post('/ParkingSpaces', postParkingSpaceHandler);
+    router.get('/ParkingSpaces', getParkingSpacesHandler);
+    router.get('/ParkingSpaces/<id>', getParkingSpaceByIdHandler);
+    router.put('/ParkingSpaces/<id>', updateParkingSpaceHandler);
+    router.delete('/ParkingSpaces/<id>', deleteParkingSpaceHandler);
 
     // Parking routes
     router.post('/parkings', postParkingHandler);
