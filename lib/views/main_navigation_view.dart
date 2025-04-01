@@ -7,10 +7,12 @@ import '../models/person.dart';
 
 class MainNavigationView extends StatefulWidget {
   final Person person;
+  final List<String> vehicleIds;
 
   const MainNavigationView({
     super.key,
     required this.person,
+    required this.vehicleIds,
   });
 
   @override
@@ -34,7 +36,7 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   Widget build(BuildContext context) {
     final views = [
       HomeView(person: widget.person),
-      ParkingView(personId: widget.person.id),
+      ParkingView(personId: widget.person.id , vehicleIds: widget.person.vehicleIds),
       HistoryView(personId: widget.person.id),
     ];
 

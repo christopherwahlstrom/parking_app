@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/parking.dart';
 
 class ParkingService {
-  final String baseUrl = 'http://localhost:8080/parkings';
+final String baseUrl = 'http://10.0.2.2:8080/parkings';
 
   Future<List<Parking>> getParkingsByPerson(String personId) async {
     final response = await http.get(Uri.parse('$baseUrl?personId=$personId'));

@@ -4,14 +4,16 @@ import 'parking_space.dart';
 
 class Parking {
   String id;
-  Vehicle fordon;
-  ParkingSpace parkeringsplats;
+  String personId;
+  String vehicleId;
+  String parkingSpaceId;
   DateTime starttid;
   DateTime? sluttid;
 
   Parking({
-    required this.fordon,
-    required this.parkeringsplats,
+    required this.personId,
+    required this.vehicleId,
+    required this.parkingSpaceId,
     required this.starttid,
     this.sluttid,
     String? id,
@@ -19,9 +21,10 @@ class Parking {
 
   factory Parking.fromJson(Map<String, dynamic> json) {
     return Parking(
-      id: json['id'],
-      fordon: Vehicle.fromJson(json['fordon']),
-      parkeringsplats: ParkingSpace.fromJson(json['parkeringsplats']),
+      id: json['id'] ?? '',
+      personId: json['personId'],
+      vehicleId: json['vehicleId'],
+      parkingSpaceId: json['parkingSpaceId'],
       starttid: DateTime.parse(json['starttid']),
       sluttid: json['sluttid'] != null ? DateTime.parse(json['sluttid']) : null,
     );
@@ -30,8 +33,9 @@ class Parking {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'fordon': fordon.toJson(),
-      'parkeringsplats': parkeringsplats.toJson(),
+      'personId': personId,
+      'vehicleId': vehicleId,
+      'parkingSpaceId': parkingSpaceId,
       'starttid': starttid.toIso8601String(),
       'sluttid': sluttid?.toIso8601String(),
     };

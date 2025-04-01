@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import '../models/parking.dart';
 import '../models/parking_space.dart';
+import '../models/vehicle.dart';
 import '../services/parking_service.dart';
 import '../services/parking_space_service.dart';
-import 'package:collection/collection.dart';
-
+import '../services/vehicle_service.dart';
+import '../utils/snackbar_service.dart';
+import 'package:uuid/uuid.dart';
 
 class ParkingView extends StatefulWidget {
   final String personId;
+  final List<String> vehicleIds;
 
-  const ParkingView({super.key, required this.personId});
+  const ParkingView({
+    super.key,
+    required this.personId,
+    required this.vehicleIds,
+  });
 
   @override
   State<ParkingView> createState() => _ParkingViewState();
@@ -17,42 +25,105 @@ class ParkingView extends StatefulWidget {
 
 class _ParkingViewState extends State<ParkingView> {
   List<ParkingSpace> _spaces = [];
+  List<Vehicle> _vehicles = [];
   Parking? _activeParking;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadSpacesAndActiveParking();
+    _loadData();
   }
 
-  Future<void> _loadSpacesAndActiveParking() async {
-    final spaces = await ParkingSpaceService().loadSpaces();
-    final parkings = await ParkingService().getParkingsByPerson(widget.personId);
+  Future<void> _loadData() async {
+    try {
+      final spaces = await ParkingSpaceService().loadSpaces();
+      final vehicles = await Future.wait(widget.vehicleIds.map((id) => VehicleService().getVehicleById(id)));
+      final validVehicles = vehicles.whereType<Vehicle>().toList();
+      final parkings = await ParkingService().getParkingsByPerson(widget.personId);
 
-    setState(() {
-      _spaces = spaces;
-      _activeParking = parkings.firstWhereOrNull((p) => p.sluttid == null);
-      _isLoading = false;
-    });
+      setState(() {
+        _spaces = spaces;
+        _vehicles = validVehicles;
+        _activeParking = parkings.firstWhereOrNull((p) => p.sluttid == null);
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        SnackBarService.showError(context, 'Kunde inte ladda parkeringsdata');
+      }
+    }
   }
 
-  Future<void> _startParking(ParkingSpace space) async {
+  Future<String?> _selectVehicleDialog() async {
+    return await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Välj fordon'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: _vehicles.map((v) {
+            return ListTile(
+              title: Text(v.registrationNumber),
+              onTap: () => Navigator.pop(context, v.id),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+    Future<void> _startParking(ParkingSpace space) async {
+    if (_vehicles.isEmpty) {
+      SnackBarService.showError(context, 'Du har inget registrerat fordon.');
+      return;
+    }
+
+    String selectedVehicleId;
+    if (_vehicles.length == 1) {
+      selectedVehicleId = _vehicles.first.id;
+    } else {
+      final result = await _selectVehicleDialog();
+      if (result == null || result.isEmpty) return;
+      selectedVehicleId = result;
+    }
+
     final newParking = Parking(
-      id: '', 
-      vehicleId: 'TODO', 
+      id: const Uuid().v4(), 
+      vehicleId: selectedVehicleId,
       parkingSpaceId: space.id,
       starttid: DateTime.now(),
       sluttid: null,
     );
-    final created = await ParkingService().startParking(newParking);
-    setState(() => _activeParking = created);
+
+    try {
+      final created = await ParkingService().startParking(newParking);
+      setState(() => _activeParking = created);
+      if (mounted) {
+        SnackBarService.showSuccess(context, 'Parkering startad!');
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackBarService.showError(context, 'Misslyckades med att starta parkering');
+      }
+    }
   }
 
   Future<void> _stopParking() async {
     if (_activeParking == null) return;
-    await ParkingService().stopParking(_activeParking!.id);
-    setState(() => _activeParking = null);
+
+    try {
+      await ParkingService().stopParking(_activeParking!.id);
+      setState(() => _activeParking = null);
+      if (mounted) {
+        SnackBarService.showSuccess(context, 'Parkering avslutad');
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackBarService.showError(context, 'Misslyckades med att stoppa parkering');
+      }
+    }
   }
 
   @override

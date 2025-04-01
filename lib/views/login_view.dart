@@ -28,7 +28,7 @@ class _LoginViewState extends State<LoginView> {
         if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MainNavigationView(person: person)),
+          MaterialPageRoute(builder: (context) => MainNavigationView(person: person, vehicleIds: person.vehicleIds)),
         );
       } else {
         SnackBarService.showError(context, 'Personen finns inte registrerad!');

@@ -11,26 +11,38 @@ Future<Response> postParkingHandler(Request request) async {
   try {
     final data = await request.readAsString();
     final json = jsonDecode(data);
+
+    print('📥 Mottar parkering JSON: $json'); // 👈 Lägg till detta
+
     var parking = Parking.fromJson(json);
-
     var parkingEntity = await parkingRepository.create(parking.toEntity());
-
     parking = await parkingEntity.toModel();
 
     return Response.ok(
       jsonEncode(parking.toJson()),
       headers: {'Content-Type': 'application/json'},
     );
-  } catch (e) {
+  } catch (e, stack) {
+    print('❌ Fel vid POST /parkings: $e');
+    print('🧱 Stacktrace: $stack');
     return Response.internalServerError(body: 'Error creating parking: $e');
   }
 }
 
+
 Future<Response> getParkingsHandler(Request request) async {
   try {
+    final personId = request.url.queryParameters['personId'];
     final entities = await parkingRepository.getAll();
 
-    final parkings = await Future.wait(entities.map((e) => e.toModel()));
+    print('🔍 Fick ${entities.length} parkeringar totalt.');
+    print('🔍 Filtrerar på personId: $personId');
+
+    final filtered = personId != null
+        ? entities.where((e) => e.personId == personId).toList()
+        : entities;
+
+    final parkings = await Future.wait(filtered.map((e) => e.toModel()));
 
     final payload = parkings.map((e) => e.toJson()).toList();
 
@@ -39,6 +51,7 @@ Future<Response> getParkingsHandler(Request request) async {
       headers: {'Content-Type': 'application/json'},
     );
   } catch (e) {
+    print('❌ Fel i getParkingsHandler: $e');
     return Response.internalServerError(body: 'Error getting parkings: $e');
   }
 }

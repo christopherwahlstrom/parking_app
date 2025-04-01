@@ -32,12 +32,13 @@ class ServerConfig {
     router.put('/vehicles/<id>', updateVehicleHandler);
     router.delete('/vehicles/<id>', deleteVehicleHandler);
 
-    // ParkingSpace routes
-    router.post('/ParkingSpaces', postParkingSpaceHandler);
-    router.get('/ParkingSpaces', getParkingSpacesHandler);
-    router.get('/ParkingSpaces/<id>', getParkingSpaceByIdHandler);
-    router.put('/ParkingSpaces/<id>', updateParkingSpaceHandler);
-    router.delete('/ParkingSpaces/<id>', deleteParkingSpaceHandler);
+    // Parking Space routes
+    router.post('/parking_spaces', postParkingSpaceHandler);
+    router.get('/parking_spaces', getParkingSpacesHandler);
+    router.get('/parking_spaces/<id>', getParkingSpaceByIdHandler);
+    router.put('/parking_spaces/<id>', updateParkingSpaceHandler);
+    router.delete('/parking_spaces/<id>', deleteParkingSpaceHandler);
+
 
     // Parking routes
     router.post('/parkings', postParkingHandler);
