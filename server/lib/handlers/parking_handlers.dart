@@ -11,6 +11,9 @@ final parkingRepository = ParkingRepository();
 Future<Response> postParkingHandler(Request request) async {
   try {
     final data = await request.readAsString();
+    
+    print('📥 Received raw POST body: $data');
+
     final json = jsonDecode(data);
     var parking = Parking.fromJson(json);
 
@@ -21,7 +24,9 @@ Future<Response> postParkingHandler(Request request) async {
       jsonEncode(parking.toJson()),
       headers: {'Content-Type': 'application/json'},
     );
-  } catch (e) {
+    } catch (e, stack) {
+    print('❌ Error in postParkingHandler: $e');
+    print('🧱 Stacktrace: $stack');
     return Response.internalServerError(body: 'Error creating parking: $e');
   }
 }
@@ -88,20 +93,33 @@ Future<Response> updateParkingHandler(Request request, String id) async {
   try {
     final data = await request.readAsString();
     final json = jsonDecode(data);
-    var parking = Parking.fromJson(json);
 
-    var entity = parking.toEntity();
-    entity = await parkingRepository.update(id, entity);
-    parking = await entity.toModel();
+    final existing = await parkingRepository.getById(id);
+    if (existing == null) {
+      return Response.notFound('Parking not found');
+    }
+
+    final endTimeStr = json['endTime'];
+    if (endTimeStr == null) {
+      return Response.badRequest(body: 'Missing endTime');
+    }
+
+    final updatedEntity = existing.copyWith(endTime: endTimeStr);
+    final saved = await parkingRepository.update(id, updatedEntity);
+    final parking = await saved.toModel();
 
     return Response.ok(
       jsonEncode(parking.toJson()),
       headers: {'Content-Type': 'application/json'},
     );
-  } catch (e) {
+  } catch (e, stack) {
+    print('❌ Error in updateParkingHandler: $e');
+    print('🧱 Stacktrace: $stack');
     return Response.internalServerError(body: 'Error updating parking: $e');
   }
 }
+
+
 
 Future<Response> deleteParkingHandler(Request request, String id) async {
   try {

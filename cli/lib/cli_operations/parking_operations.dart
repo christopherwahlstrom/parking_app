@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cli/repositories/parking_repository.dart';
 import 'package:cli/repositories/vehicle_repository.dart';
 import 'package:cli/repositories/parking_space_repository.dart';
@@ -39,10 +38,12 @@ class ParkingOperations {
       final parking = Parking(
         id: '',
         personId: personId!,
-        vehicle: vehicle,
-        parkingSpace: space,
+        vehicleId: vehicle.id,
+        parkingSpaceId: space.id,
         startTime: DateTime.now(),
         endTime: null,
+        vehicle: vehicle,
+        parkingSpace: space,
       );
 
       await repository.create(parking);
@@ -55,11 +56,12 @@ class ParkingOperations {
   static Future list() async {
     final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
+      final p = allParkings[i];
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
-        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
-        '- Start: ${allParkings[i].startTime} '
-        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${p.vehicle?.registrationNumber ?? p.vehicleId} '
+        '- Space: ${p.parkingSpace?.adress ?? p.parkingSpaceId} '
+        '- Start: ${p.startTime} '
+        '- End: ${p.endTime ?? 'Ongoing'}',
       );
     }
   }
@@ -67,11 +69,12 @@ class ParkingOperations {
   static Future update() async {
     final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
+      final p = allParkings[i];
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
-        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
-        '- Start: ${allParkings[i].startTime} '
-        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${p.vehicle?.registrationNumber ?? p.vehicleId} '
+        '- Space: ${p.parkingSpace?.adress ?? p.parkingSpaceId} '
+        '- Start: ${p.startTime} '
+        '- End: ${p.endTime ?? 'Ongoing'}',
       );
     }
 
@@ -80,14 +83,14 @@ class ParkingOperations {
 
     if (Validator.isIndex(input, allParkings)) {
       final index = int.parse(input!) - 1;
-      final parking = allParkings[index];
+      final old = allParkings[index];
 
       print('Enter new end time (yyyy-MM-ddTHH:mm:ss): ');
       final endTime = stdin.readLineSync();
 
       if (Validator.isDateTime(endTime)) {
-        parking.endTime = DateTime.parse(endTime!);
-        await repository.update(parking.id, parking);
+        final updated = old.copyWith(endTime: DateTime.parse(endTime!));
+        await repository.update(updated.id, updated);
         print('✅ Parking updated');
       } else {
         print('Invalid date format');
@@ -100,11 +103,12 @@ class ParkingOperations {
   static Future delete() async {
     final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
+      final p = allParkings[i];
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
-        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
-        '- Start: ${allParkings[i].startTime} '
-        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${p.vehicle?.registrationNumber ?? p.vehicleId} '
+        '- Space: ${p.parkingSpace?.adress ?? p.parkingSpaceId} '
+        '- Start: ${p.startTime} '
+        '- End: ${p.endTime ?? 'Ongoing'}',
       );
     }
 

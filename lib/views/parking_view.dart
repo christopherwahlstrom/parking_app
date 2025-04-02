@@ -90,7 +90,8 @@ class _ParkingViewState extends State<ParkingView> {
     }
 
     final newParking = Parking(
-      id: const Uuid().v4(), 
+      id: const Uuid().v4(),
+      personId: widget.personId, 
       vehicleId: selectedVehicleId,
       parkingSpaceId: space.id,
       startTime: DateTime.now(),
