@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/parking.dart';
 
 class ParkingService {
-final String baseUrl = 'http://10.0.2.2:8080/parkings';
+  final String baseUrl = 'http://10.0.2.2:8080/parkings';
 
   Future<List<Parking>> getParkingsByPerson(String personId) async {
     final response = await http.get(Uri.parse('$baseUrl?personId=$personId'));
@@ -11,7 +11,7 @@ final String baseUrl = 'http://10.0.2.2:8080/parkings';
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((p) => Parking.fromJson(p)).toList();
     } else {
-      throw Exception('Kunde inte hämta parkeringar');
+      throw Exception('Could not fetch parkings');
     }
   }
 
@@ -24,7 +24,7 @@ final String baseUrl = 'http://10.0.2.2:8080/parkings';
     if (response.statusCode == 201 || response.statusCode == 200) {
       return Parking.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Kunde inte starta parkering');
+      throw Exception('Could not start parking');
     }
   }
 
@@ -37,7 +37,7 @@ final String baseUrl = 'http://10.0.2.2:8080/parkings';
     if (response.statusCode == 200) {
       return Parking.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Kunde inte stoppa parkering');
+      throw Exception('Could not stop parking');
     }
   }
 }

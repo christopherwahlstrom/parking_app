@@ -5,39 +5,44 @@ import 'parking_space.dart';
 class Parking {
   String id;
   String personId;
-  String vehicleId;
-  String parkingSpaceId;
-  DateTime starttid;
-  DateTime? sluttid;
+  Vehicle vehicle;
+  ParkingSpace parkingSpace;
+  DateTime startTime;
+  DateTime? endTime;
 
   Parking({
     required this.personId,
-    required this.vehicleId,
-    required this.parkingSpaceId,
-    required this.starttid,
-    this.sluttid,
+    required this.vehicle,
+    required this.parkingSpace,
+    required this.startTime,
+    this.endTime,
     String? id,
   }) : id = id ?? Uuid().v4();
 
   factory Parking.fromJson(Map<String, dynamic> json) {
+    final personId = json['personId'];
+    if (personId == null) {
+      throw Exception('❌ personId is missing in Parking JSON: $json');
+    }
+
     return Parking(
-      id: json['id'] ?? '',
-      personId: json['personId'],
-      vehicleId: json['vehicleId'],
-      parkingSpaceId: json['parkingSpaceId'],
-      starttid: DateTime.parse(json['starttid']),
-      sluttid: json['sluttid'] != null ? DateTime.parse(json['sluttid']) : null,
+      id: json['id'],
+      personId: json['personId'] ?? '',
+      vehicle: Vehicle.fromJson(json['vehicle']),
+      parkingSpace: ParkingSpace.fromJson(json['parkingSpace']),
+      startTime: DateTime.parse(json['startTime']),
+      endTime: json['endTime'] != null ? DateTime.parse(json['endTime']) : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
+    Map<String, dynamic> toJson() {
     return {
       'id': id,
       'personId': personId,
-      'vehicleId': vehicleId,
-      'parkingSpaceId': parkingSpaceId,
-      'starttid': starttid.toIso8601String(),
-      'sluttid': sluttid?.toIso8601String(),
+      'vehicleId': vehicle.id,
+      'parkingSpaceId': parkingSpace.id,
+      'startTime': startTime.toIso8601String(),
+      'endTime': endTime?.toIso8601String(),
     };
   }
 }

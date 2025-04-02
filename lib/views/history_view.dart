@@ -28,7 +28,7 @@ class _HistoryViewState extends State<HistoryView> {
     final parkings = await ParkingService().getParkingsByPerson(widget.personId);
     final spaces = await ParkingSpaceService().loadSpaces();
 
-    final finished = parkings.where((p) => p.sluttid != null).toList();
+    final finished = parkings.where((p) => p.endTime != null).toList();
     final spaceMap = {for (var s in spaces) s.id: s};
 
     setState(() {
@@ -53,13 +53,13 @@ class _HistoryViewState extends State<HistoryView> {
         itemBuilder: (context, index) {
           final parking = _history[index];
           final space = _spacesById[parking.parkingSpaceId];
-          final duration = parking.sluttid!.difference(parking.starttid);
+          final duration = parking.endTime!.difference(parking.startTime);
           final cost = (duration.inMinutes / 60.0) * (space?.prisPerTimme ?? 0);
 
           return ListTile(
             title: Text(space?.adress ?? 'Okänd plats'),
             subtitle: Text(
-              'Från: ${parking.starttid}\nTill: ${parking.sluttid}\nTid: ${duration.inMinutes} min\nKostnad: ${cost.toStringAsFixed(2)} kr',
+              'Från: ${parking.startTime}\nTill: ${parking.endTime}\nTid: ${duration.inMinutes} min\nKostnad: ${cost.toStringAsFixed(2)} kr',
             ),
           );
         },

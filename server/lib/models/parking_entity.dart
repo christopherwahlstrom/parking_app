@@ -4,29 +4,29 @@ import 'package:shared/shared.dart';
 
 class ParkingEntity {
   final String id;
-  final String personId;
+  final String? personId;
   final String vehicleId;
   final String parkingSpaceId;
-  final String starttid;
-  final String? sluttid;
+  final String startTime;
+  final String? endTime;
 
   ParkingEntity({
     required this.id,
     required this.personId,
     required this.vehicleId,
     required this.parkingSpaceId,
-    required this.starttid,
-    this.sluttid,
+    required this.startTime,
+    this.endTime,
   });
 
   factory ParkingEntity.fromJson(Map<String, dynamic> json) {
     return ParkingEntity(
       id: json['id'],
-      personId: json['personId'],
+      personId: json['personId'], 
       vehicleId: json['vehicleId'],
       parkingSpaceId: json['parkingSpaceId'],
-      starttid: json['starttid'],
-      sluttid: json['sluttid'],
+      startTime: json['startTime'],
+      endTime: json['endTime'],
     );
   }
 
@@ -36,45 +36,51 @@ class ParkingEntity {
       'personId': personId,
       'vehicleId': vehicleId,
       'parkingSpaceId': parkingSpaceId,
-      'starttid': starttid,
-      'sluttid': sluttid,
+      'startTime': startTime,
+      'endTime': endTime,
     };
   }
 
-    Future<Parking> toModel() async {
+  Future<Parking> toModel() async {
     final vehicle = await VehicleRepository().getById(vehicleId);
     if (vehicle == null) {
-      throw Exception('Fordon med ID $vehicleId hittades inte.');
+      throw Exception('Vehicle with ID $vehicleId not found');
     }
 
     final parkingSpaceEntity = await ParkingSpaceRepository().getById(parkingSpaceId);
     if (parkingSpaceEntity == null) {
-      throw Exception('Parkeringsplats med ID $parkingSpaceId hittades inte.');
+      throw Exception('Parking space with ID $parkingSpaceId not found');
     }
 
     final parkingSpace = parkingSpaceEntity.toModel();
 
+    // Hämta personId från vehicle om det saknas
+    final resolvedPersonId = personId ?? vehicle.ownerId;
+
+    if (resolvedPersonId == null) {
+      throw Exception('Unable to resolve personId for parking with ID $id');
+    }
+
     return Parking(
       id: id,
-      personId: personId,
-      vehicleId: vehicleId,
-      parkingSpaceId: parkingSpaceId,
-      starttid: DateTime.parse(starttid),
-      sluttid: sluttid != null ? DateTime.parse(sluttid!) : null,
+      personId: resolvedPersonId,
+      vehicle: vehicle.toModel(),
+      parkingSpace: parkingSpace,
+      startTime: DateTime.parse(startTime),
+      endTime: endTime != null ? DateTime.parse(endTime!) : null,
     );
   }
 }
-
 
 extension EntityConversion on Parking {
   ParkingEntity toEntity() {
     return ParkingEntity(
       id: id,
       personId: personId,
-      vehicleId: vehicleId,
-      parkingSpaceId: parkingSpaceId,
-      starttid: starttid.toIso8601String(),
-      sluttid: sluttid?.toIso8601String(),
+      vehicleId: vehicle.id,
+      parkingSpaceId: parkingSpace.id,
+      startTime: startTime.toIso8601String(),
+      endTime: endTime?.toIso8601String(),
     );
   }
 }

@@ -12,120 +12,111 @@ ParkingSpaceRepository parkingSpaceRepository = ParkingSpaceRepository();
 
 class ParkingOperations {
   static Future create() async {
-  print('Enter vehicle registrationNumber: ');
-  var registrationNumber = stdin.readLineSync();
+    print('Enter vehicle registration number: ');
+    var registrationNumber = stdin.readLineSync();
 
-  print('Enter parking space address: ');
-  var adress = stdin.readLineSync();
+    print('Enter parking space address: ');
+    var address = stdin.readLineSync();
 
-  if (Validator.isString(registrationNumber) && Validator.isString(adress)) {
-    // Hämta fordon
-    List<Vehicle> allVehicles = await vehicleRepository.getAll();
-    Vehicle? vehicle;
-    try {
-      vehicle = allVehicles.firstWhere((v) => v.registrationNumber == registrationNumber);
-    } catch (e) {
-      vehicle = null;
+    print('Enter personId: ');
+    var personId = stdin.readLineSync();
+
+    if (Validator.isString(registrationNumber) &&
+        Validator.isString(address) &&
+        Validator.isString(personId)) {
+      final allVehicles = await vehicleRepository.getAll();
+      final vehicle = allVehicles.firstWhere(
+        (v) => v.registrationNumber == registrationNumber,
+        orElse: () => throw Exception('Vehicle not found.'),
+      );
+
+      final allSpaces = await parkingSpaceRepository.getAll();
+      final space = allSpaces.firstWhere(
+        (p) => p.adress == address,
+        orElse: () => throw Exception('Parking space not found.'),
+      );
+
+      final parking = Parking(
+        id: '',
+        personId: personId!,
+        vehicle: vehicle,
+        parkingSpace: space,
+        startTime: DateTime.now(),
+        endTime: null,
+      );
+
+      await repository.create(parking);
+      print('✅ Parking created');
+    } else {
+      print('Invalid input');
     }
-
-    if (vehicle == null) {
-      print('Vehicle not found. Please create the vehicle first.');
-      return;
-    }
-
-    
-    if (vehicle.ownerId == null || vehicle.ownerId!.isEmpty) {
-      print('Vehicle does not have an owner. Please assign an owner first.');
-      return;
-    }
-
-    List<ParkingSpace> allParkingSpaces = await parkingSpaceRepository.getAll();
-    ParkingSpace? parkingSpace;
-    try {
-      parkingSpace = allParkingSpaces.firstWhere((p) => p.adress == adress);
-    } catch (e) {
-      parkingSpace = null;
-    }
-
-    if (parkingSpace == null) {
-      print('Parking space not found. Please create the parking space first.');
-      return;
-    }
-
-    
-    Parking parking = Parking(
-      id: '', 
-      personId: vehicle.ownerId,
-      vehicleId: vehicle.id,
-      parkingSpaceId: parkingSpace.id,
-      starttid: DateTime.now(),
-      sluttid: null,
-    );
-
-    await repository.create(parking);
-    print('Parking created');
-  } else {
-    print('Invalid input');
   }
-}
 
   static Future list() async {
-    List<Parking> allParkings = await repository.getAll();
+    final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicleId} - Parking Space: ${allParkings[i].parkingSpaceId} - Start: ${allParkings[i].starttid} - End: ${allParkings[i].sluttid ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
+        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
+        '- Start: ${allParkings[i].startTime} '
+        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
       );
     }
   }
 
   static Future update() async {
-    print('Pick an index to update: ');
-    List<Parking> allParkings = await repository.getAll();
+    final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicleId} - Parking Space: ${allParkings[i].parkingSpaceId} - Start: ${allParkings[i].starttid} - End: ${allParkings[i].sluttid ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
+        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
+        '- Start: ${allParkings[i].startTime} '
+        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
       );
     }
 
-    String? input = stdin.readLineSync();
+    print('Pick an index to update: ');
+    final input = stdin.readLineSync();
 
     if (Validator.isIndex(input, allParkings)) {
-      int index = int.parse(input!) - 1;
-      Parking parking = allParkings[index];
+      final index = int.parse(input!) - 1;
+      final parking = allParkings[index];
 
       print('Enter new end time (yyyy-MM-ddTHH:mm:ss): ');
-      var endTime = stdin.readLineSync();
+      final endTime = stdin.readLineSync();
 
       if (Validator.isDateTime(endTime)) {
-        parking.sluttid = DateTime.parse(endTime!);
-
+        parking.endTime = DateTime.parse(endTime!);
         await repository.update(parking.id, parking);
-        print('Parking updated');
+        print('✅ Parking updated');
       } else {
-        print('Invalid input');
+        print('Invalid date format');
       }
     } else {
-      print('Invalid input');
+      print('Invalid index');
     }
   }
 
   static Future delete() async {
-    print('Pick an index to delete: ');
-    List<Parking> allParkings = await repository.getAll();
+    final allParkings = await repository.getAll();
     for (int i = 0; i < allParkings.length; i++) {
       print(
-        '${i + 1}. Vehicle: ${allParkings[i].vehicleId} - Parking Space: ${allParkings[i].parkingSpaceId} - Start: ${allParkings[i].starttid} - End: ${allParkings[i].sluttid ?? 'Ongoing'}',
+        '${i + 1}. Vehicle: ${allParkings[i].vehicle.id} '
+        '- Parking Space: ${allParkings[i].parkingSpace.adress} '
+        '- Start: ${allParkings[i].startTime} '
+        '- End: ${allParkings[i].endTime ?? 'Ongoing'}',
       );
     }
 
-    String? input = stdin.readLineSync();
+    print('Pick an index to delete: ');
+    final input = stdin.readLineSync();
 
     if (Validator.isIndex(input, allParkings)) {
-      int index = int.parse(input!) - 1;
+      final index = int.parse(input!) - 1;
       await repository.delete(allParkings[index].id);
-      print('Parking deleted');
+      print('🗑️ Parking deleted');
     } else {
-      print('Invalid input');
+      print('Invalid index');
     }
   }
 }

@@ -45,7 +45,7 @@ class _ParkingViewState extends State<ParkingView> {
       setState(() {
         _spaces = spaces;
         _vehicles = validVehicles;
-        _activeParking = parkings.firstWhereOrNull((p) => p.sluttid == null);
+        _activeParking = parkings.firstWhereOrNull((p) => p.endTime == null);
         _isLoading = false;
       });
     } catch (e) {
@@ -93,8 +93,8 @@ class _ParkingViewState extends State<ParkingView> {
       id: const Uuid().v4(), 
       vehicleId: selectedVehicleId,
       parkingSpaceId: space.id,
-      starttid: DateTime.now(),
-      sluttid: null,
+      startTime: DateTime.now(),
+      endTime: null,
     );
 
     try {
@@ -140,7 +140,7 @@ class _ParkingViewState extends State<ParkingView> {
               margin: const EdgeInsets.all(8),
               child: ListTile(
                 title: Text('Aktiv parkering i zon ${_activeParking!.parkingSpaceId}'),
-                subtitle: Text('Startade: ${_activeParking!.starttid}'),
+                subtitle: Text('Startade: ${_activeParking!.startTime}'),
                 trailing: ElevatedButton(
                   onPressed: _stopParking,
                   child: const Text('Stoppa'),

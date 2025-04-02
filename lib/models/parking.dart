@@ -6,15 +6,15 @@ class Parking {
   final String id;
   final String vehicleId;
   final String parkingSpaceId;
-  final DateTime starttid;
-  final DateTime? sluttid;
+  final DateTime startTime;
+  final DateTime? endTime;
 
   Parking({
     required this.id,
     required this.vehicleId,
     required this.parkingSpaceId,
-    required this.starttid,
-    this.sluttid,
+    required this.startTime,
+    this.endTime,
   });
 
   factory Parking.fromJson(Map<String, dynamic> json) {
@@ -22,9 +22,9 @@ class Parking {
       id: json['id'],
       vehicleId: json['vehicleId'],
       parkingSpaceId: json['parkingSpaceId'],
-      starttid: DateTime.parse(json['starttid']),
-      sluttid:
-          json['sluttid'] != null ? DateTime.tryParse(json['sluttid']) : null,
+      startTime: DateTime.parse(json['startTime']),
+      endTime:
+          json['endTime'] != null ? DateTime.tryParse(json['endTime']) : null,
     );
   }
 
@@ -32,7 +32,7 @@ class Parking {
     'id': id,
     'vehicleId': vehicleId,
     'parkingSpaceId': parkingSpaceId,
-    'starttid': starttid.toIso8601String(),
-    'sluttid': sluttid?.toIso8601String(),
+    'startTime': startTime.toIso8601String(),
+    'endTime': endTime?.toIso8601String(),
   };
 }
