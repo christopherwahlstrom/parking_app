@@ -16,13 +16,14 @@ En enkel parkeringsapp byggd med Flutter som stödjer inloggning, hantering av f
 
 - Inloggning med namn och utloggning
 - Skapa ny användare
-- Lägg till/redigera/ta bort fordon
+-  VG , Lägg till/redigera/ta bort fordon
 - Lista egna fordon
 - Visa lediga parkeringsplatser
 - Starta och stoppa parkering
 - Visa historik för avslutade parkeringar
-- Mörkt och ljust läge med tema-växling
+-  VG , Mörkt och ljust läge med tema-växling
 - Responsivt UI för mobil
+
 
 ## ⚠️ Kända begränsningar
 
