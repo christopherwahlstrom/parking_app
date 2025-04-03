@@ -60,14 +60,24 @@ class _LoginViewState extends State<LoginView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Parking4U'),
-        actions: [
+          title: Text(
+            'Parking4U',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          centerTitle: true,
+          actions: [
           IconButton(
             icon: Icon(isDark ? Icons.wb_sunny : Icons.dark_mode),
             onPressed: () => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
           ),
         ],
-      ),
+),
+
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),

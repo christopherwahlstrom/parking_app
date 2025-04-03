@@ -3,6 +3,9 @@ import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
 import '../models/person.dart';
+import '../theme/theme_provider.dart';
+import 'package:provider/provider.dart';
+
 
 
 class MainNavigationView extends StatefulWidget {
@@ -34,6 +37,8 @@ class _MainNavigationViewState extends State<MainNavigationView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final views = [
       HomeView(person: widget.person),
       ParkingView(personId: widget.person.id , vehicleIds: widget.person.vehicleIds),
@@ -42,10 +47,21 @@ class _MainNavigationViewState extends State<MainNavigationView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Parking4U'),
-        centerTitle: true,
-        backgroundColor: Colors.blue,
-        actions: [
+          title: Text(
+            'Parking4U',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          centerTitle: true,
+          actions: [
+          IconButton(
+            icon: Icon(isDark ? Icons.wb_sunny : Icons.dark_mode),
+            onPressed: () => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: _logout,
