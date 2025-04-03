@@ -17,15 +17,17 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
-  Future<void> _submit() async {
+    Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       final person = await PersonService().getPersonByName(_nameController.text);
 
-      if (!mounted) return;
+      if (!mounted) return; // Kontrollera om widgeten fortfarande är monterad
 
       if (person != null) {
         SnackBarService.showSuccess(context, 'Välkommen! ${person.name}');
         await Future.delayed(const Duration(milliseconds: 300));
+
+        if (!mounted) return; // Kontrollera igen efter fördröjningen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
