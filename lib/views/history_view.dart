@@ -47,7 +47,10 @@ class _HistoryViewState extends State<HistoryView> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Historik')),
+      appBar: AppBar(
+        title: const Text('Historik'),
+        centerTitle: true,
+      ),
       body: ListView.builder(
         itemCount: _history.length,
         itemBuilder: (context, index) {
@@ -56,10 +59,17 @@ class _HistoryViewState extends State<HistoryView> {
           final duration = parking.endTime!.difference(parking.startTime);
           final cost = (duration.inMinutes / 60.0) * (space?.prisPerTimme ?? 0);
 
-          return ListTile(
-            title: Text(space?.adress ?? 'Okänd plats'),
-            subtitle: Text(
-              'Från: ${parking.startTime}\nTill: ${parking.endTime}\nTid: ${duration.inMinutes} min\nKostnad: ${cost.toStringAsFixed(2)} kr',
+          return Card(
+            color: Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade800 : null,
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: ListTile(
+              title: Text(space?.adress ?? 'Okänd plats'),
+              subtitle: Text(
+                'Från: ${parking.startTime.toString().substring(0, 16)}\n'
+                'Till: ${parking.endTime?.toString().substring(0, 16) ?? 'Pågår'}\n'
+                'Tid: ${duration.inMinutes} min\n'
+                'Kostnad: ${cost.toStringAsFixed(2)} kr',
+              ),
             ),
           );
         },

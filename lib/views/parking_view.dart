@@ -57,22 +57,32 @@ class _ParkingViewState extends State<ParkingView> {
   }
 
   Future<String?> _selectVehicleDialog() async {
-    return await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Välj fordon'),
-        content: Column(
+  return await showDialog<String>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Välj fordon'),
+      content: SingleChildScrollView(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: _vehicles.map((v) {
-            return ListTile(
-              title: Text(v.registrationNumber),
-              onTap: () => Navigator.pop(context, v.id),
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              elevation: 2,
+              child: ListTile(
+                leading: const Icon(Icons.directions_car),
+                title: Text(v.registrationNumber),
+                subtitle: Text('Typ: ${v.type}'),
+                onTap: () => Navigator.pop(context, v.id),
+              ),
             );
           }).toList(),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
     Future<void> _startParking(ParkingSpace space) async {
     if (_vehicles.isEmpty) {
@@ -110,7 +120,6 @@ class _ParkingViewState extends State<ParkingView> {
       }
     }
   }
-
   Future<void> _stopParking() async {
     if (_activeParking == null) return;
 
@@ -129,19 +138,25 @@ class _ParkingViewState extends State<ParkingView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (_isLoading) return const Center(child: CircularProgressIndicator());
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Parkering')),
+      appBar: AppBar(
+        title: const Text('Parkeringsplatser'),
+        
+        centerTitle: true,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_activeParking != null)
             Card(
               margin: const EdgeInsets.all(8),
+              color: isDark ? Colors.grey.shade800 : null,
               child: ListTile(
-                title: Text('Aktiv parkering i zon ${_activeParking!.parkingSpace?.adress ?? _activeParking!.parkingSpaceId}'),
-                subtitle: Text('Startade: ${_activeParking!.startTime}'),
+                title: Text('Aktiv parkering i zon: ${_activeParking!.parkingSpace?.adress ?? _activeParking!.parkingSpaceId}'),
+                subtitle: Text('Startade: ${_activeParking!.startTime.toString().substring(0, 16)}'),
                 trailing: ElevatedButton(
                   onPressed: _stopParking,
                   child: const Text('Stoppa'),
@@ -155,6 +170,8 @@ class _ParkingViewState extends State<ParkingView> {
                 itemBuilder: (context, index) {
                   final space = _spaces[index];
                   return Card(
+                    color: isDark ? Colors.grey.shade800 : null,
+                    margin: const EdgeInsets.all(8),
                     child: ListTile(
                       title: Text(space.adress),
                       subtitle: Text('Pris: ${space.prisPerTimme} kr/h'),

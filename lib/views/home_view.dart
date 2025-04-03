@@ -47,14 +47,8 @@ class _HomeViewState extends State<HomeView> {
         title: const Text('Bekräfta radering'),
         content: const Text('Är du säker på att du vill ta bort detta fordon?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Avbryt'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Ta bort'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Avbryt')),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Ta bort')),
         ],
       ),
     );
@@ -73,9 +67,7 @@ class _HomeViewState extends State<HomeView> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => EditVehicleModal(
         vehicle: vehicle,
         onSaved: () {
@@ -90,9 +82,7 @@ class _HomeViewState extends State<HomeView> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => AddVehicleModal(
         person: widget.person,
         onSaved: () {
@@ -105,6 +95,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -118,11 +110,20 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Namn: ${widget.person.name}', style: Theme.of(context).textTheme.titleLarge),
+                  Text(
+                    '👤 Namn: ${widget.person.name}',
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(height: 8),
-                  Text('Personnummer: ${widget.person.personalNumber}', style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: 16),
-                  Text('Dina fordon:', style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'Personnummer: ${widget.person.personalNumber}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Dina fordon:',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 8),
                   Expanded(
                     child: ListView.builder(
@@ -130,22 +131,16 @@ class _HomeViewState extends State<HomeView> {
                       itemBuilder: (context, index) {
                         final vehicle = vehicles[index];
                         return Card(
+                          color: isDark ? Colors.grey.shade800 : null,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
                           child: ListTile(
                             title: Text('Registreringsnummer: ${vehicle.registrationNumber}'),
                             subtitle: Text('Fordonstyp: ${vehicle.type}'),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                  icon: const Icon(Icons.edit, color: Colors.blue),
-                                  tooltip: 'Redigera',
-                                  onPressed: () => _editVehicle(vehicle),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red),
-                                  tooltip: 'Ta bort',
-                                  onPressed: () => _deleteVehicle(vehicle.id),
-                                ),
+                                IconButton(icon: const Icon(Icons.edit, color: Colors.blue), onPressed: () => _editVehicle(vehicle)),
+                                IconButton(icon: const Icon(Icons.delete, color: Colors.red), onPressed: () => _deleteVehicle(vehicle.id)),
                               ],
                             ),
                           ),
@@ -159,4 +154,3 @@ class _HomeViewState extends State<HomeView> {
           );
   }
 }
-
