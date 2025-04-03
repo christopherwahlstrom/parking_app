@@ -1,3 +1,37 @@
+# Dokumentation om arbetet: 
+
+# Parking4U 🚘
+
+En enkel parkeringsapp byggd med Flutter som stödjer inloggning, hantering av fordon och parkering i olika zoner.
+
+## 🔧 Genomförda Installationsanvisningar
+
+1. Klona repot: `git clone <repo-url>`
+2. Navigera till projektmappen: `cd flutter_parking_app`
+3. Installera beroenden: `flutter pub get`
+4. Kör appen: `flutter run`
+5. Kör server: `dart run server:server`
+
+## ✅ Funktioner
+
+- Inloggning med namn och utloggning
+- Skapa ny användare
+- Lägg till/redigera/ta bort fordon
+- Lista egna fordon
+- Visa lediga parkeringsplatser
+- Starta och stoppa parkering
+- Visa historik för avslutade parkeringar
+- Mörkt och ljust läge med tema-växling
+- Responsivt UI för mobil
+
+## ⚠️ Kända begränsningar
+
+- Ingen faktisk autentisering, bara namnmatchning
+- Inga verkliga parkeringsdata eller realtidsuppdateringar
+- Alla data sparas endast lokalt
+
+
+
 # Flutter Parkeringsapplikation - Uppgift 3
 
 ## Introduktion
