@@ -140,7 +140,7 @@ class _ParkingViewState extends State<ParkingView> {
             Card(
               margin: const EdgeInsets.all(8),
               child: ListTile(
-                title: Text('Aktiv parkering i zon ${_activeParking!.parkingSpaceId}'),
+                title: Text('Aktiv parkering i zon ${_activeParking!.parkingSpace?.adress ?? _activeParking!.parkingSpaceId}'),
                 subtitle: Text('Startade: ${_activeParking!.startTime}'),
                 trailing: ElevatedButton(
                   onPressed: _stopParking,
