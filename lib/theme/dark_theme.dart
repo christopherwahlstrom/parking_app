@@ -12,5 +12,5 @@ final darkTheme = ThemeData(
     foregroundColor: Colors.white,
   ),
   scaffoldBackgroundColor: const Color(0xFF121212),
-  cardColor: const Color(0xFF1E1E1E),
+  cardColor: Colors.grey.shade800,
 );

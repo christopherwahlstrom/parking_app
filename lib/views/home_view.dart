@@ -95,8 +95,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -131,7 +129,7 @@ class _HomeViewState extends State<HomeView> {
                       itemBuilder: (context, index) {
                         final vehicle = vehicles[index];
                         return Card(
-                          color: isDark ? Colors.grey.shade800 : null,
+                          color: Theme.of(context).cardColor,
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           child: ListTile(
                             title: Text('Registreringsnummer: ${vehicle.registrationNumber}'),

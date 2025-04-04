@@ -139,13 +139,11 @@ class _ParkingViewState extends State<ParkingView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (_isLoading) return const Center(child: CircularProgressIndicator());
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Parkeringsplatser'),
-        
         centerTitle: true,
       ),
       body: Column(
