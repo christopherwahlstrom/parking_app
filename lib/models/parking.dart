@@ -1,5 +1,5 @@
-import 'package:uuid/uuid.dart';
-import 'vehicle.dart';
+// import 'package:uuid/uuid.dart';
+// import 'vehicle.dart';
 import 'parking_space.dart';
 
 class Parking {
@@ -30,7 +30,7 @@ class Parking {
       parkingSpaceId: json['parkingSpaceId'],
       startTime: DateTime.parse(json['startTime']),
       endTime: json['endTime'] != null ? DateTime.tryParse(json['endTime']) : null,
-      parkingSpace: json['parkingSpace'] != null ? ParkingSpace.fromJson(json['parkingSpace']) : null, // Lägg till detta
+      parkingSpace: json['parkingSpace'] != null ? ParkingSpace.fromJson(json['parkingSpace']) : null, 
     );
   }
 

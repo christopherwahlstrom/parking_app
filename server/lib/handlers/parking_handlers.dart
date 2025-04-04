@@ -12,7 +12,7 @@ Future<Response> postParkingHandler(Request request) async {
   try {
     final data = await request.readAsString();
     
-    print('📥 Received raw POST body: $data');
+    print('Received raw POST body: $data');
 
     final json = jsonDecode(data);
     var parking = Parking.fromJson(json);
@@ -25,8 +25,8 @@ Future<Response> postParkingHandler(Request request) async {
       headers: {'Content-Type': 'application/json'},
     );
     } catch (e, stack) {
-    print('❌ Error in postParkingHandler: $e');
-    print('🧱 Stacktrace: $stack');
+    print('Error in postParkingHandler: $e');
+    print('Stacktrace: $stack');
     return Response.internalServerError(body: 'Error creating parking: $e');
   }
 }
@@ -36,17 +36,17 @@ Future<Response> getParkingsHandler(Request request) async {
     final personId = request.url.queryParameters['personId'];
     final entities = await parkingRepository.getAll();
 
-    print('🔍 Fick ${entities.length} parkeringar totalt.');
-    print('🔍 personId från query: $personId');
+    print('Fick ${entities.length} parkeringar totalt.');
+    print('personId från query: $personId');
 
     
     final parkings = await Future.wait(entities.map((e) async {
       try {
         final model = await e.toModel();
-        print('✅ Konverterad Parking: id=${model.id}, personId=${model.personId}');
+        print('Konverterad Parking: id=${model.id}, personId=${model.personId}');
         return model;
       } catch (err) {
-        print('❌ Fel vid konvertering av ParkingEntity ${e.id}: $err');
+        print('Fel vid konvertering av ParkingEntity ${e.id}: $err');
         return null;
       }
     }));
@@ -65,7 +65,7 @@ Future<Response> getParkingsHandler(Request request) async {
       headers: {'Content-Type': 'application/json'},
     );
   } catch (e) {
-    print('❌ Error in getParkingsHandler: $e');
+    print('Error in getParkingsHandler: $e');
     return Response.internalServerError(body: 'Error getting parkings: $e');
   }
 }
@@ -113,8 +113,8 @@ Future<Response> updateParkingHandler(Request request, String id) async {
       headers: {'Content-Type': 'application/json'},
     );
   } catch (e, stack) {
-    print('❌ Error in updateParkingHandler: $e');
-    print('🧱 Stacktrace: $stack');
+    print('Error in updateParkingHandler: $e');
+    print('Stacktrace: $stack');
     return Response.internalServerError(body: 'Error updating parking: $e');
   }
 }

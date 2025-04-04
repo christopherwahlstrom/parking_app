@@ -47,7 +47,7 @@ class ParkingOperations {
       );
 
       await repository.create(parking);
-      print('✅ Parking created');
+      print('Parking created');
     } else {
       print('Invalid input');
     }
@@ -91,7 +91,7 @@ class ParkingOperations {
       if (Validator.isDateTime(endTime)) {
         final updated = old.copyWith(endTime: DateTime.parse(endTime!));
         await repository.update(updated.id, updated);
-        print('✅ Parking updated');
+        print('Parking updated');
       } else {
         print('Invalid date format');
       }
@@ -118,7 +118,7 @@ class ParkingOperations {
     if (Validator.isIndex(input, allParkings)) {
       final index = int.parse(input!) - 1;
       await repository.delete(allParkings[index].id);
-      print('🗑️ Parking deleted');
+      print('Parking deleted');
     } else {
       print('Invalid index');
     }
