@@ -60,7 +60,7 @@ class _HistoryViewState extends State<HistoryView> {
           final cost = (duration.inMinutes / 60.0) * (space?.prisPerTimme ?? 0);
 
           return Card(
-            color: Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade800 : null,
+            color: Theme.of(context).cardColor,
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: ListTile(
               title: Text(space?.adress ?? 'Okänd plats'),

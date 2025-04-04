@@ -8,6 +8,10 @@ final lightTheme = ThemeData(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
   ),
-  scaffoldBackgroundColor: Colors.grey[100],
-  cardColor: Colors.white,
+  scaffoldBackgroundColor: Colors.grey[200],
+  cardColor: Colors.white, 
+  cardTheme: const CardTheme(
+    elevation: 2, 
+    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+  ),
 );

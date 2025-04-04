@@ -66,6 +66,7 @@ class _ParkingViewState extends State<ParkingView> {
           mainAxisSize: MainAxisSize.min,
           children: _vehicles.map((v) {
             return Card(
+              color: Theme.of(context).cardColor,
               margin: const EdgeInsets.symmetric(vertical: 4),
               elevation: 2,
               child: ListTile(
@@ -153,7 +154,7 @@ class _ParkingViewState extends State<ParkingView> {
           if (_activeParking != null)
             Card(
               margin: const EdgeInsets.all(8),
-              color: isDark ? Colors.grey.shade800 : null,
+              color: Theme.of(context).cardColor,
               child: ListTile(
                 title: Text('Aktiv parkering i zon: ${_activeParking!.parkingSpace?.adress ?? _activeParking!.parkingSpaceId}'),
                 subtitle: Text('Startade: ${_activeParking!.startTime.toString().substring(0, 16)}'),
@@ -170,7 +171,7 @@ class _ParkingViewState extends State<ParkingView> {
                 itemBuilder: (context, index) {
                   final space = _spaces[index];
                   return Card(
-                    color: isDark ? Colors.grey.shade800 : null,
+                    color: Theme.of(context).cardColor,
                     margin: const EdgeInsets.all(8),
                     child: ListTile(
                       title: Text(space.adress),
