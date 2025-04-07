@@ -5,6 +5,7 @@ import '../theme/theme_provider.dart';
 import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
+import 'login_view.dart';
 
 class MainNavigationView extends StatefulWidget {
   final Person person;
@@ -36,8 +37,13 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   }
 
   void _logout() {
-    Navigator.pop(context);
-  }
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const LoginView()),
+    (route) => false,
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
