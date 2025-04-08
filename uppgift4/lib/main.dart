@@ -4,12 +4,18 @@ import 'theme/theme_provider.dart';
 import 'theme/light_theme.dart';
 import 'theme/dark_theme.dart';
 import 'views/login_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'blocs/auth_bloc.dart';
+import 'services/person_service.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
-      child: const ParkingApp(),
+      child: BlocProvider(
+        create: (_) => AuthBloc(personService: PersonService()),
+        child: const ParkingApp(),
+      ),
     ),
   );
 }
