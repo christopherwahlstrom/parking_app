@@ -1,103 +1,80 @@
-# Dokumentation om arbetet: 
+# Parking4U 🚘 - Uppgift 4
 
-# Parking4U 🚘
+En vidareutveckling av Flutter-applikationen *Parking4U*, där vi infört **BLoC-pattern** för state management samt börjat skriva enhetstester.
 
-En enkel parkeringsapp byggd med Flutter som stödjer inloggning, hantering av fordon och parkering i olika zoner.
+## 🔧 Installationsanvisningar
 
-## 🔧 Genomförda Installationsanvisningar
+1. Klona repot:  
+   `git clone <repo-url>`
+2. Gå till mappen för uppgift 4:  
+   `cd parking_app/uppgift4`
+3. Installera beroenden:  
+   `flutter pub get`
+4. Starta appen i emulator:  
+   `flutter run`
+5. Kör backend/server separat:  
+   `dart run server:server`
 
-1. Klona repot: `git clone <repo-url>`
-2. Navigera till projektmappen: `cd flutter_parking_app`
-3. Installera beroenden: `flutter pub get`
-4. Kör appen: `flutter run`
-5. Kör server: `dart run server:server`
+## ✅ Funktioner (inkl. BLoC-införande)
 
-## ✅ Funktioner
-
-- Inloggning med namn och utloggning
+- Inloggning med namn (via **AuthBloc**)
 - Skapa ny användare
--  VG , Lägg till/redigera/ta bort fordon
-- Lista egna fordon
-- Visa lediga parkeringsplatser
-- Starta och stoppa parkering
-- Visa historik för avslutade parkeringar
--  VG , Mörkt och ljust läge med tema-växling
-- Responsivt UI för mobil
+- Lista egna fordon (**VehicleBloc**)
+- Lägg till, redigera och ta bort fordon
+- Lista parkeringszoner (**ParkingSpaceBloc**)
+- Starta och stoppa parkering (**ParkingBloc**)
+- Visa historik över avslutade parkeringar
+- Mörkt/ljust läge med knapp för växling
+- Responsiv layout (NavigationRail för större skärmar)
 
+## 🧪 Tester
+
+- Varje BLoC-komponent har minst ett testfall (success + error case)
+- **Mocktail** används för att mocka repositories
+- **bloc_test** används för att verifiera event/state-flöde
 
 ## ⚠️ Kända begränsningar
 
-- Ingen faktisk autentisering, bara namnmatchning
-- Inga verkliga parkeringsdata eller realtidsuppdateringar
-- Alla data sparas endast lokalt
+- Ingen riktig autentisering, endast namnmatchning
+- Ingen realtidsdata – alla data laddas om manuellt
+- Lokalt sparad data (ej kopplat till backend-databas ännu)
+- Testerna täcker ännu inte hela UI:t
 
+## 📂 Mappstruktur
 
+```
+lib/
+├── blocs/
+│   ├── auth/
+│   ├── vehicle/
+│   ├── parking/
+│   └── parking_space/
+├── repositories/
+├── views/
+└── main.dart
+```
 
-# Flutter Parkeringsapplikation - Uppgift 3
+## ✨ Krav från uppgift 4
 
-## Introduktion
-I denna uppgift ska vi vidareutveckla vår parkeringsapplikation genom att skapa en Flutter-klient som ersätter delar av vårt tidigare CLI. Målet är att bygga en mobilapp för slutanvändare som vill parkera sina fordon.
+| **Kategori**          | **Krav**                                                                      | **Uppfyllt** |
+|-----------------------|--------------------------------------------------------------------------------|--------------|
+| BLoC                  | Minst fyra BLoC: AuthBloc, VehicleBloc, ParkingBloc, ParkingSpaceBloc         | ✅            |
+| Events & States       | Samtliga BLoC definierar events/states korrekt                                | ✅            |
+| Testing               | Minst ett test för success + fail-case per BLoC                               | ✅            |
+| Mocking               | Mocktail används för att testa repository-förfrågningar                       | ✅            |
+| UI-integration        | BlocBuilder och BlocProvider används korrekt                                  | ✅            |
+| Extra för VG          | Responsiv design, dark/light toggle                                           | ✅            |
 
-## Projektstruktur
-**Projekt:** `parking_user` (Mobilapplikation)
+## 🎥 Videogenomgång
 
-- **Målplattform:** Mobil (iOS/Android) samt webb/desktop (landskapsläge)
-- **Användare:** Personer som behöver parkera sina fordon
-- **Navigation:**  
-  Använd `NavigationBar` eller `BottomAppBar` för bottennavigering samt `NavigationRail` för sidnavigering.
+Se bifogad videodemonstration i inlämningen där vi visar:
+- Inloggning och registrering
+- Navigering mellan vyer
+- Exempel på fordonshantering
+- Start/stop av parkering
+- Dark/light toggle
+- BLoC-tester i terminal
 
-## Huvudfunktioner
-- **Användarregistrering och in-/utloggning**
-- **Fordonshantering**
-- **Val av parkeringsplats**
-- **Hantering av aktiva parkeringar**
+---
 
-## Krav för Godkänt (G)
-Notera att kraven beskriver funktionalitet, inte specifika implementationsstrategier. Du bestämmer själv vilka delar du vill ta med från föreläsningarna.
-
-### Generella Krav
-- Applikationen ska fungera enligt specifikationen.
-- Lämplig felhantering och återkoppling till användaren.
-- Datavalidering där det är lämpligt.
-
-### `parking_user` (Mobilapp)
-1. **Användarhantering:**  
-   - Registrering av nya användare  
-   - In-/utloggning
-
-2. **Fordonshantering:**  
-   - Lägg till/ta bort fordon  
-   - Lista egna fordon
-
-3. **Parkeringsfunktioner:**  
-   - Visa lediga parkeringsplatser  
-   - Starta parkering  
-   - Avsluta parkering  
-   - Visa parkeringshistorik
-
-## Inlämningskrav
-1. Komplett källkod för applikationen.
-2. Kort videodemo som visar:
-   - Huvudfunktionerna i appen.
-   - Navigation mellan olika vyer.
-   - Exempelanvändning.
-3. Minimal dokumentation:
-   - Installationsanvisningar.
-   - Lista över implementerade funktioner.
-   - Kända begränsningar.
-
-> **Obs:** Om dokumentationen inkluderas i README.md, ange detta som en kommentar vid inlämningen.
-
-## Extra Utmaningar för VG (minst 2 stycken)
-- Lägg till sökfunktioner för listor (t.ex. att söka efter en specifik parkeringsplats).
-- Lägg till funktionalitet för att redigera skapat data (t.ex. fordon eller användare).
-- Lägg till sorteringsalternativ för listor (t.ex. parkeringsplatser eller pågående/avslutade parkeringar).
-- Lägg till stöd för mörkt/ljust tema.
-- Eget förslag, med examinator kommunicerat och godkänt.
-
-## Checklista för inlämning
-
-| **Kategori**             | **Krav**                                                        | **Status** | **Kommentar** |
-|--------------------------|-----------------------------------------------------------------|------------|---------------|
-| **Generella Krav**       | Båda applikationerna ska vara funktionella                      | ⬜         |               |
-|                         
+> Denna dokumentation finns även i projektets `uppgift4/README.md`.
