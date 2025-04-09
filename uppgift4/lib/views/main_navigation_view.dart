@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import '../models/person.dart';
 import '../theme/theme_provider.dart';
+import '../services/vehicle_service.dart';
+import '../blocs/vehicle/vehicle_bloc.dart';
+import '../blocs/vehicle/vehicle_event.dart';
 import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
@@ -37,76 +41,79 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   }
 
   void _logout() {
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const LoginView()),
-    (route) => false,
-  );
-}
-
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginView()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        bool isMobile = constraints.maxWidth < 600;
+    return BlocProvider<VehicleBloc>(
+      create: (_) => VehicleBloc(vehicleService: VehicleService())
+        ..add(LoadVehicles(widget.person.id)),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isMobile = constraints.maxWidth < 600;
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Parking4U',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-            ),
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            elevation: 0,
-            centerTitle: true,
-            actions: [
-              IconButton(
-                icon: Icon(isDark ? Icons.wb_sunny : Icons.dark_mode),
-                onPressed: () => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
-              ),
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: _logout,
-              ),
-            ],
-          ),
-          body: isMobile
-              ? _views[_selectedIndex]
-              : Row(
-                  children: [
-                    NavigationRail(
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: _onItemTapped,
-                      labelType: NavigationRailLabelType.all,
-                      destinations: const [
-                        NavigationRailDestination(icon: Icon(Icons.home), label: Text('Hem')),
-                        NavigationRailDestination(icon: Icon(Icons.local_parking), label: Text('Parkering')),
-                        NavigationRailDestination(icon: Icon(Icons.history), label: Text('Historik')),
-                      ],
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Parking4U',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    const VerticalDivider(thickness: 1, width: 1),
-                    Expanded(child: _views[_selectedIndex]),
-                  ],
+              ),
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 0,
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  icon: Icon(isDark ? Icons.wb_sunny : Icons.dark_mode),
+                  onPressed: () => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
                 ),
-          bottomNavigationBar: isMobile
-              ? BottomNavigationBar(
-                  items: const [
-                    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Hem'),
-                    BottomNavigationBarItem(icon: Icon(Icons.local_parking), label: 'Parkering'),
-                    BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historik'),
-                  ],
-                  currentIndex: _selectedIndex,
-                  onTap: _onItemTapped,
-                )
-              : null,
-        );
-      },
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: _logout,
+                ),
+              ],
+            ),
+            body: isMobile
+                ? _views[_selectedIndex]
+                : Row(
+                    children: [
+                      NavigationRail(
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: _onItemTapped,
+                        labelType: NavigationRailLabelType.all,
+                        destinations: const [
+                          NavigationRailDestination(icon: Icon(Icons.home), label: Text('Hem')),
+                          NavigationRailDestination(icon: Icon(Icons.local_parking), label: Text('Parkering')),
+                          NavigationRailDestination(icon: Icon(Icons.history), label: Text('Historik')),
+                        ],
+                      ),
+                      const VerticalDivider(thickness: 1, width: 1),
+                      Expanded(child: _views[_selectedIndex]),
+                    ],
+                  ),
+            bottomNavigationBar: isMobile
+                ? BottomNavigationBar(
+                    items: const [
+                      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Hem'),
+                      BottomNavigationBarItem(icon: Icon(Icons.local_parking), label: 'Parkering'),
+                      BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Historik'),
+                    ],
+                    currentIndex: _selectedIndex,
+                    onTap: _onItemTapped,
+                  )
+                : null,
+          );
+        },
+      ),
     );
   }
 }

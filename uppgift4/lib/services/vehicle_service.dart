@@ -47,4 +47,17 @@ class VehicleService {
       throw Exception('Kunde inte ta bort fordon');
     }
   }
+    Future<List<Vehicle>> getAllVehicles() async {
+    final response = await http.get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = jsonDecode(response.body);
+      return jsonList.map((json) => Vehicle.fromJson(json)).toList();
+    } else {
+      throw Exception('Kunde inte hämta fordon');
+    }
+  }
 }
+
+
+
