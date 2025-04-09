@@ -26,7 +26,7 @@ class _HistoryViewState extends State<HistoryView> {
 
   Future<void> _loadHistory() async {
     final parkings = await ParkingService().getParkingsByPerson(widget.personId);
-    final spaces = await ParkingSpaceService().loadSpaces();
+    final spaces = await ParkingSpaceService().getAllParkingSpaces();
 
     final finished = parkings.where((p) => p.endTime != null).toList();
     final spaceMap = {for (var s in spaces) s.id: s};
