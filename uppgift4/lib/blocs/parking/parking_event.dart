@@ -16,7 +16,6 @@ class LoadActiveParkings extends ParkingEvent {
 
 class StopParking extends ParkingEvent {
   final String parkingId;
-  final DateTime endTime;
 
-  StopParking({required this.parkingId, required this.endTime});
+  StopParking({required this.parkingId});
 }

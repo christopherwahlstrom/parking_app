@@ -38,7 +38,7 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
   Future<void> _onStopParking(StopParking event, Emitter<ParkingState> emit) async {
     emit(ParkingLoading());
     try {
-      await parkingService.stopParking(event.parkingId, event.endTime);
+      await parkingService.stopParking(event.parkingId);
       emit(ParkingStoppedSuccess());
     } catch (e) {
       emit(ParkingError('Kunde inte stoppa parkering: $e'));
