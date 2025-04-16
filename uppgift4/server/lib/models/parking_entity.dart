@@ -59,9 +59,7 @@ class ParkingEntity {
     final parkingSpace = parkingSpaceEntity.toModel();
 
     final resolvedPersonId = personId ?? vehicle.ownerId;
-    if (resolvedPersonId == null) {
-      throw Exception('Unable to resolve personId for parking with ID $id');
-    }
+    
 
     return Parking(
       id: id,

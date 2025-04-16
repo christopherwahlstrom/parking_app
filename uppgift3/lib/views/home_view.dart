@@ -100,8 +100,8 @@ class _HomeViewState extends State<HomeView> {
         : Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: _showAddVehicleModal,
-              child: const Icon(Icons.add),
               tooltip: 'Lägg till fordon',
+              child: const Icon(Icons.add),
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),

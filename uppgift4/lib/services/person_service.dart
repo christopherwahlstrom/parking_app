@@ -58,4 +58,56 @@ class PersonService {
       return false;
     }
   }
+
+  Future<void> removeVehicleFromPerson(String personId, String vehicleId) async {
+  try {
+    final response = await http.get(Uri.parse(baseUrl));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      final personJson = data.firstWhere((p) => p['id'] == personId, orElse: () => null);
+
+      if (personJson != null) {
+        final person = Person.fromJson(personJson);
+        person.vehicleIds.remove(vehicleId); 
+        await updatePerson(person); 
+          }
+        }
+      } catch (e) {
+        log('removeVehicleFromPerson error: $e');
+      }
+    }
+
+  Future<void> addVehicleToPerson(String personId,  String vehicleId) async {
+    try {
+      final response = await http.get(Uri.parse(baseUrl));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        final personJson = data.firstWhere((p) => p['id'] == personId, orElse: () => null);
+
+        if (personJson != null) {
+          final person = Person.fromJson(personJson);
+          if (!person.vehicleIds.contains(vehicleId)) {
+            person.vehicleIds.add(vehicleId); // Lägg till fordonets ID
+            await updatePerson(person); // Uppdatera personen i persons.json
+          }
+        }
+      }
+    } catch (e) {
+      log('addVehicleToPerson error: $e');
+    }
+  }
+
+    Future<Person?> getPersonById(String id) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/$id'));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return Person.fromJson(data);
+      }
+    } catch (e) {
+      log('getPersonById error: $e');
+    }
+    return null;
+  }
+
 }

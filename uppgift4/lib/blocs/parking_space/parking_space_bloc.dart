@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'parking_space_event.dart';
 import 'parking_space_state.dart';
-import '../../models/parking_space.dart';
 import '../../services/parking_space_service.dart';
 
 class ParkingSpaceBloc extends Bloc<ParkingSpaceEvent, ParkingSpaceState> {

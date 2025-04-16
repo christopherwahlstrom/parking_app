@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
 import '../models/person.dart';
 import '../theme/theme_provider.dart';
 import '../services/vehicle_service.dart';
+import '../services/parking_service.dart';
+import '../services/person_service.dart';
+import '../services/parking_space_service.dart';
+import '../blocs/parking_space/parking_space_bloc.dart';
+import '../blocs/parking_space/parking_space_event.dart';
+
 import '../blocs/vehicle/vehicle_bloc.dart';
 import '../blocs/vehicle/vehicle_event.dart';
+import '../blocs/parking/parking_bloc.dart';
+import '../blocs/parking/parking_event.dart';
 import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
@@ -52,9 +61,24 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return BlocProvider<VehicleBloc>(
-      create: (_) => VehicleBloc(vehicleService: VehicleService())
+    return MultiBlocProvider(
+  providers: [
+    BlocProvider<VehicleBloc>(
+      create: (_) => VehicleBloc(
+        vehicleService: VehicleService(),
+        personService: PersonService(), // Add the required personService argument
+      )
         ..add(LoadVehicles(widget.person.id)),
+    ),
+    BlocProvider<ParkingBloc>(
+      create: (_) => ParkingBloc(parkingService: ParkingService())
+        ..add(LoadActiveParkings(widget.person.id)),
+    ),
+    BlocProvider<ParkingSpaceBloc>(
+      create: (_) => ParkingSpaceBloc(parkingSpaceService: ParkingSpaceService())
+        ..add(LoadParkingSpaces()),
+    ),
+  ],
       child: LayoutBuilder(
         builder: (context, constraints) {
           bool isMobile = constraints.maxWidth < 600;

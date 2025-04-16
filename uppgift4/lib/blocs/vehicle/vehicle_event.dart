@@ -9,12 +9,12 @@ class LoadVehicles extends VehicleEvent {
 
 class AddVehicle extends VehicleEvent {
   final Vehicle vehicle;
-  AddVehicle(this.vehicle);
+  AddVehicle({required this.vehicle});
 }
 
 class UpdateVehicle extends VehicleEvent {
   final Vehicle vehicle;
-  UpdateVehicle(this.vehicle);
+  UpdateVehicle({required this.vehicle}); 
 }
 
 class DeleteVehicle extends VehicleEvent {
