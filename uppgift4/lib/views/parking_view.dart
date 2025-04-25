@@ -136,19 +136,30 @@ class _ParkingViewState extends State<ParkingView> {
                       if (state.parkings.isEmpty) {
                         return const Text('Ingen aktiv parkering.');
                       }
+
+                      final parkingSpaceState = context.read<ParkingSpaceBloc>().state;
+                      List<ParkingSpace> parkingSpaces = [];
+                      if (parkingSpaceState is ParkingSpaceLoaded) {
+                        parkingSpaces = parkingSpaceState.parkingSpaces;
+                      }
+
                       return ListView.builder(
-                        itemCount: state.parkings.length,
-                        itemBuilder: (context, index) {
-                          final parking = state.parkings[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            child: ListTile(
-                              title: Text('Zon: ${parking.parkingSpaceId}'),
-                              subtitle: Text('Start: ${parking.startTime.toString().substring(0, 16)}'),
-                              trailing: ElevatedButton(
-                                onPressed: () => _stopParking(parking.id),
-                                child: const Text('Stoppa'),
-                              ),
+          itemCount: state.parkings.length,
+          itemBuilder: (context, index) {
+            final parking = state.parkings[index];
+            final space = parkingSpaces.firstWhere(
+              (s) => s.id == parking.parkingSpaceId,
+              orElse: () => ParkingSpace(id: '', adress: 'Okänd zon', prisPerTimme: 0),
+                    );
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: ListTile(
+                        title: Text('Zon: ${space.adress}'),
+                        subtitle: Text('Start: ${parking.startTime.toString().substring(0, 16)}'),
+                        trailing: ElevatedButton(
+                          onPressed: () => _stopParking(parking.id),
+                          child: const Text('Stoppa'),
+                        ),
                             ),
                           );
                         },
