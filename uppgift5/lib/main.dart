@@ -9,6 +9,10 @@ import 'blocs/auth_bloc.dart';
 import 'services/person_service.dart';
 
 void main() {
+
+
+
+  
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
