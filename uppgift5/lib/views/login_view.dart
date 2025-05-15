@@ -18,12 +18,15 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      final name = _nameController.text.trim();
-      context.read<AuthBloc>().add(LoginRequested(username: name));
+      context.read<AuthBloc>().add(LoginRequested(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      ));
     }
   }
 
@@ -76,8 +79,8 @@ class _LoginViewState extends State<LoginView> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => MainNavigationView(
-                      person: state.user,
-                      vehicleIds: state.user.vehicleIds,
+                      person: state.person,
+                      vehicleIds: state.person.vehicleIds,
                     ),
                   ),
                 );
@@ -100,13 +103,24 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     const SizedBox(height: 32),
                     TextFormField(
-                      controller: _nameController,
+                      controller: emailController,
                       decoration: const InputDecoration(
-                        labelText: 'Ditt namn',
+                        labelText: 'E-post',
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) =>
-                          value == null || value.trim().isEmpty ? 'Fyll i ditt namn' : null,
+                          value == null || value.trim().isEmpty ? 'Fyll i din e-post' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Lösenord',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) =>
+                          value == null || value.length < 6 ? 'Minst 6 tecken' : null,
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(

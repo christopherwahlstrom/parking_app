@@ -3,12 +3,14 @@ import 'package:uuid/uuid.dart';
 class Person {
   String name;
   String personalNumber;
+  String email;
   List<String> vehicleIds;
   String id;
 
   Person({
     required this.name,
     required this.personalNumber,
+    this.email = '',
     List<String>? vehicleIds,
     String? id,
   })  : vehicleIds = vehicleIds ?? [],
@@ -18,6 +20,7 @@ class Person {
     return Person(
       name: json['name'],
       personalNumber: json['personalNumber'],
+      email: json['email'] ?? '',
       vehicleIds: List<String>.from(json['vehicleIds'] ?? []),
       id: json['id'],
     );
@@ -27,6 +30,7 @@ class Person {
     return {
       "name": name,
       "personalNumber": personalNumber,
+      "email": email,
       "vehicleIds": vehicleIds,
       "id": id,
     };
