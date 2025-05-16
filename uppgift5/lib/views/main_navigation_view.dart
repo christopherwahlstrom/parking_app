@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../models/person.dart';
 import '../theme/theme_provider.dart';
-import '../services/vehicle_service.dart';
+import '../services/vehicle_firestore_service.dart';
 import '../services/parking_service.dart';
-import '../services/person_service.dart';
+import '../services/person_firestore_service.dart';
 import '../services/parking_space_service.dart';
 import '../blocs/parking_space/parking_space_bloc.dart';
 import '../blocs/parking_space/parking_space_event.dart';
@@ -65,8 +65,8 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   providers: [
     BlocProvider<VehicleBloc>(
       create: (_) => VehicleBloc(
-        vehicleService: VehicleService(),
-        personService: PersonService(), // Add the required personService argument
+        vehicleService: VehicleFirestoreService(),
+        personService: PersonFirestoreService(), 
       )
         ..add(LoadVehicles(widget.person.id)),
     ),

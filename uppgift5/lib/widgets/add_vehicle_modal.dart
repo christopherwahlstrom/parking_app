@@ -24,10 +24,17 @@ class _AddVehicleModalState extends State<AddVehicleModal> {
   final _formKey = GlobalKey<FormState>();
   final _regController = TextEditingController();
   final _typeController = TextEditingController();
+  bool _submitted = false;
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save(); // Trigga onSaved
+      final newVehicle = Vehicle(
+        registrationNumber: _regController.text.trim(),
+        type: _typeController.text.trim(),
+        ownerId: widget.person.id,
+      );
+      setState(() => _submitted = true);
+      context.read<VehicleBloc>().add(AddVehicle(vehicle: newVehicle));
     }
   }
 
@@ -35,8 +42,13 @@ class _AddVehicleModalState extends State<AddVehicleModal> {
   Widget build(BuildContext context) {
     return BlocListener<VehicleBloc, VehicleState>(
       listener: (context, state) {
-        if (state is VehicleError) {
-          if (!mounted) return;
+        if (_submitted && state is VehicleLoaded) {
+          if (Navigator.of(context).canPop()) {
+            Navigator.pop(context, true);
+          }
+          SnackBarService.showSuccess(context, 'Fordon tillagt!');
+          _submitted = false;
+        } else if (state is VehicleError) {
           SnackBarService.showError(context, state.message);
         }
       },
@@ -63,16 +75,6 @@ class _AddVehicleModalState extends State<AddVehicleModal> {
                 maxLength: 6,
                 validator: (value) =>
                     value == null || value.trim().isEmpty ? 'Ange ett registreringsnummer' : null,
-                onSaved: (_) {
-                  final newVehicle = Vehicle(
-                    registrationNumber: _regController.text.trim(),
-                    type: _typeController.text.trim(),
-                    ownerId: widget.person.id,
-                  );
-
-                  context.read<VehicleBloc>().add(AddVehicle(vehicle: newVehicle));
-                  Navigator.pop(context, true); // Returnera true för att indikera att ett fordon har lagts till
-                },
               ),
               const SizedBox(height: 16),
               TextFormField(

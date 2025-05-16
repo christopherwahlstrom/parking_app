@@ -11,7 +11,7 @@ import 'services/person_firestore_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +19,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FirebaseAuth.instance.signOut();
 
-  
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(),

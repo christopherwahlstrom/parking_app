@@ -101,41 +101,52 @@ class HomeView extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: vehicles.length,
-                      itemBuilder: (context, index) {
-                        final vehicle = vehicles[index];
-                        return Card(
-                          color: Theme.of(context).cardColor,
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          child: ListTile(
-                            title: Text('Registreringsnummer: ${vehicle.registrationNumber}'),
-                            subtitle: Text('Fordonstyp: ${vehicle.type}'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.edit, color: Colors.blue),
-                                  onPressed: () => _editVehicle(context, vehicle),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () => _deleteVehicle(context, vehicle),
-                                ),
-                              ],
+                  if (vehicles.isEmpty)
+                    const Expanded(
+                      child: Center(
+                        child: Text(
+                          "Du har inga fordon ännu!",
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: vehicles.length,
+                        itemBuilder: (context, index) {
+                          final vehicle = vehicles[index];
+                          return Card(
+                            color: Theme.of(context).cardColor,
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            child: ListTile(
+                              title: Text('Registreringsnummer: ${vehicle.registrationNumber}'),
+                              subtitle: Text('Fordonstyp: ${vehicle.type}'),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.blue),
+                                    onPressed: () => _editVehicle(context, vehicle),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () => _deleteVehicle(context, vehicle),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
-                  ),
                 ],
               );
             } else if (state is VehicleError) {
               return Center(child: Text('Fel: ${state.message}'));
             }
-            return const SizedBox();
+            // Hantera även initial state
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),

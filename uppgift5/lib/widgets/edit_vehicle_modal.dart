@@ -44,7 +44,6 @@ class _EditVehicleModalState extends State<EditVehicleModal> {
         type: _typeController.text.trim(),
         ownerId: widget.personId,
       );
-
       setState(() => _submitted = true);
       context.read<VehicleBloc>().add(UpdateVehicle(vehicle: updatedVehicle));
     }
@@ -55,12 +54,12 @@ class _EditVehicleModalState extends State<EditVehicleModal> {
     return BlocListener<VehicleBloc, VehicleState>(
       listener: (context, state) {
         if (_submitted && state is VehicleLoaded) {
-          if (!mounted) return;
-          Navigator.pop(context);
+          if (Navigator.of(context).canPop()) {
+            Navigator.pop(context);
+          }
           widget.onSaved();
           _submitted = false;
         } else if (state is VehicleError) {
-          if (!mounted) return;
           SnackBarService.showError(context, state.message);
         }
       },
