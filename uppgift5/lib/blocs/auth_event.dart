@@ -19,6 +19,8 @@ class RegisterRequested extends AuthEvent {
   });
 }
 
+
+
 class LogoutRequested extends AuthEvent {}
 
 class AuthUserChanged extends AuthEvent {
