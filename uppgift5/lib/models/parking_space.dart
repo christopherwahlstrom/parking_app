@@ -12,7 +12,7 @@ class ParkingSpace {
     return ParkingSpace(
       id: json['id'],
       adress: json['adress'],
-      prisPerTimme: json['prisPerTimme'],
+      prisPerTimme: (json['prisPerTimme'] as num).toDouble(),
     );
   }
 

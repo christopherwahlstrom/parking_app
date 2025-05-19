@@ -18,9 +18,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthUserChanged>(_onAuthUserChanged);
 
     authRepository.authStateChanges.listen((user) {
+    print('LoginRequested event körs!');
       if (user != null) {
         add(AuthUserChanged(user.uid));
-      } 
+      }
     });
   }
 
@@ -35,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthFailure(e.message ?? 'Inloggningen misslyckades.'));
     }
   }
+  
 
   Future<void> _onRegisterRequested(
     RegisterRequested event,
@@ -77,7 +79,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
-    final person = await personService.getPersonById(event.uid);
+    Person? person;
+    int retries = 0;
+   
+    while (person == null && retries < 15) {
+      person = await personService.getPersonById(event.uid);
+       print('Försök $retries: Hittade person? ${person != null}');
+      if (person == null) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        retries++;
+      }
+    }
     if (person != null) {
       emit(AuthSuccess(person));
     } else {

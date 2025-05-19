@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import '../models/person.dart';
 import '../theme/theme_provider.dart';
 import '../services/vehicle_firestore_service.dart';
-import '../services/parking_service.dart';
 import '../services/person_firestore_service.dart';
-import '../services/parking_space_service.dart';
+import '../services/parking_space_firestore_service.dart';
+import '../services/parking_firestore_service.dart';
 import '../blocs/parking_space/parking_space_bloc.dart';
 import '../blocs/parking_space/parking_space_event.dart';
 
@@ -15,10 +15,12 @@ import '../blocs/vehicle/vehicle_bloc.dart';
 import '../blocs/vehicle/vehicle_event.dart';
 import '../blocs/parking/parking_bloc.dart';
 import '../blocs/parking/parking_event.dart';
+import '../blocs/auth_bloc.dart';
+import '../blocs/auth_event.dart';
 import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
-import 'login_view.dart';
+// import 'login_view.dart';
 
 class MainNavigationView extends StatefulWidget {
   final Person person;
@@ -50,11 +52,7 @@ class _MainNavigationViewState extends State<MainNavigationView> {
   }
 
   void _logout() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginView()),
-      (route) => false,
-    );
+    context.read<AuthBloc>().add(LogoutRequested());
   }
 
   @override
@@ -71,11 +69,11 @@ class _MainNavigationViewState extends State<MainNavigationView> {
         ..add(LoadVehicles(widget.person.id)),
     ),
     BlocProvider<ParkingBloc>(
-      create: (_) => ParkingBloc(parkingService: ParkingService())
+      create: (_) => ParkingBloc(parkingService: ParkingFirestoreService())
         ..add(LoadActiveParkings(widget.person.id)),
     ),
     BlocProvider<ParkingSpaceBloc>(
-      create: (_) => ParkingSpaceBloc(parkingSpaceService: ParkingSpaceService())
+      create: (_) => ParkingSpaceBloc(parkingSpaceService: ParkingSpaceFirestoreService())
         ..add(LoadParkingSpaces()),
     ),
   ],

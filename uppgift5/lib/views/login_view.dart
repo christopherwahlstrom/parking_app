@@ -5,7 +5,6 @@ import '../blocs/auth_event.dart';
 import '../blocs/auth_state.dart';
 import '../utils/snackbar_service.dart';
 import '../widgets/register_person_modal.dart';
-import 'main_navigation_view.dart';
 import '../theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -74,17 +73,7 @@ class _LoginViewState extends State<LoginView> {
           padding: const EdgeInsets.all(24),
           child: BlocConsumer<AuthBloc, AuthState>(
             listener: (context, state) {
-              if (state is AuthSuccess) {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MainNavigationView(
-                      person: state.person,
-                      vehicleIds: state.person.vehicleIds,
-                    ),
-                  ),
-                );
-              } else if (state is AuthFailure) {
+              if (state is AuthFailure) {
                 SnackBarService.showError(context, state.error);
               }
             },
@@ -92,7 +81,6 @@ class _LoginViewState extends State<LoginView> {
               if (state is AuthLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-
               return Form(
                 key: _formKey,
                 child: Column(

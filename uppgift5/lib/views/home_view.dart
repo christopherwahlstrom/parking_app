@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../blocs/vehicle/vehicle_bloc.dart';
 import '../blocs/vehicle/vehicle_event.dart';
 import '../blocs/vehicle/vehicle_state.dart';
@@ -145,7 +144,6 @@ class HomeView extends StatelessWidget {
             } else if (state is VehicleError) {
               return Center(child: Text('Fel: ${state.message}'));
             }
-            // Hantera även initial state
             return const Center(child: CircularProgressIndicator());
           },
         ),

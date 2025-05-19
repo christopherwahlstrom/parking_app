@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/parking.dart';
 import '../models/parking_space.dart';
-import '../services/parking_service.dart';
-import '../services/parking_space_service.dart';
+import '../services/parking_firestore_service.dart';
+import '../services/parking_space_firestore_service.dart';
 
 class HistoryView extends StatefulWidget {
   final String personId;
@@ -25,8 +25,8 @@ class _HistoryViewState extends State<HistoryView> {
   }
 
   Future<void> _loadHistory() async {
-    final parkings = await ParkingService().getParkingsByPerson(widget.personId);
-    final spaces = await ParkingSpaceService().getAllParkingSpaces();
+    final parkings = await ParkingFirestoreService().getParkingsByPerson(widget.personId);
+    final spaces = await ParkingSpaceFirestoreService().getAllParkingSpaces();
 
     final finished = parkings.where((p) => p.endTime != null).toList();
     final spaceMap = {for (var s in spaces) s.id: s};

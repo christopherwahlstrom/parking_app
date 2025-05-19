@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'parking_space_event.dart';
 import 'parking_space_state.dart';
-import '../../services/parking_space_service.dart';
+// import '../../services/parking_space_service.dart';
+import '../../services/parking_space_firestore_service.dart';
 
 class ParkingSpaceBloc extends Bloc<ParkingSpaceEvent, ParkingSpaceState> {
-  final ParkingSpaceService parkingSpaceService;
+  final ParkingSpaceFirestoreService parkingSpaceService;
 
   ParkingSpaceBloc({required this.parkingSpaceService}) : super(ParkingSpaceInitial()) {
     on<LoadParkingSpaces>(_onLoadParkingSpaces);

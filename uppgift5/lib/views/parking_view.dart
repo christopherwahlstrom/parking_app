@@ -7,7 +7,6 @@ import '../models/vehicle.dart';
 import '../models/parking_space.dart';
 import '../blocs/vehicle/vehicle_event.dart';
 
-
 import '../blocs/parking/parking_bloc.dart';
 import '../blocs/parking/parking_event.dart';
 import '../blocs/parking/parking_state.dart';
@@ -136,14 +135,24 @@ class _ParkingViewState extends State<ParkingView> {
                       if (state.parkings.isEmpty) {
                         return const Text('Ingen aktiv parkering.');
                       }
+                      // Hämta parkeringszoner från ParkingSpaceBloc
+                      final parkingSpaces = (context.read<ParkingSpaceBloc>().state is ParkingSpaceLoaded)
+                          ? (context.read<ParkingSpaceBloc>().state as ParkingSpaceLoaded).parkingSpaces
+                          : [];
+
                       return ListView.builder(
                         itemCount: state.parkings.length,
                         itemBuilder: (context, index) {
                           final parking = state.parkings[index];
+                          // Slå upp adressen
+                          final space = parkingSpaces.firstWhere(
+                            (s) => s.id == parking.parkingSpaceId,
+                            orElse: () => ParkingSpace(id: '', adress: 'Okänd plats', prisPerTimme: 0),
+                          );
                           return Card(
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             child: ListTile(
-                              title: Text('Zon: ${parking.parkingSpaceId}'),
+                              title: Text('Zon: ${space.adress}'),
                               subtitle: Text('Start: ${parking.startTime.toString().substring(0, 16)}'),
                               trailing: ElevatedButton(
                                 onPressed: () => _stopParking(parking.id),
