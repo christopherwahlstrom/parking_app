@@ -1,0 +1,42 @@
+[
+     {
+       "id": "3b7f6705-cf7a-4c2f-a7cf-2c7f585ab0e2",
+       "adress": "Stora Torget",
+       "prisPerTimme": 30.0
+     },
+     {
+       "id": "4c8f6705-cf7a-4c2f-a7cf-2c7f585ab0e3",
+       "adress": "Centralstationen",
+       "prisPerTimme": 25.0
+     },
+     {
+       "id": "5d9f6705-cf7a-4c2f-a7cf-2c7f585ab0e4",
+       "adress": "Köpcentrumet",
+       "prisPerTimme": 20.0
+     },
+     {
+       "id": "6eaf6705-cf7a-4c2f-a7cf-2c7f585ab0e5",
+       "adress": "Universitetet",
+       "prisPerTimme": 15.0
+     },
+     {
+       "id": "7fbf6705-cf7a-4c2f-a7cf-2c7f585ab0e6",
+       "adress": "Flygplatsen",
+       "prisPerTimme": 40.0
+     },
+     {
+       "id": "8gcf6705-cf7a-4c2f-a7cf-2c7f585ab0e7",
+       "adress": "Hamnen",
+       "prisPerTimme": 35.0
+     },
+     {
+       "id": "9hdf6705-cf7a-4c2f-a7cf-2c7f585ab0e8",
+       "adress": "Stadshuset",
+       "prisPerTimme": 50.0
+     },
+     {
+       "id": "10ief6705-cf7a-4c2f-a7cf-2c7f585ab0e9",
+       "adress": "Sporthallen",
+       "prisPerTimme": 10.0
+     }
+   ]
