@@ -31,7 +31,6 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     try {
       await vehicleService.createVehicle(event.vehicle);
       await personService.addVehicleToPerson(event.vehicle.ownerId, event.vehicle.id);
-      // **Behöver INTE emit VehicleLoaded, streamen gör det automatiskt!**
     } catch (e) {
       emit(VehicleError('Kunde inte lägga till fordon: $e'));
     }
@@ -40,7 +39,6 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
   Future<void> _onUpdateVehicle(UpdateVehicle event, Emitter<VehicleState> emit) async {
     try {
       await vehicleService.updateVehicle(event.vehicle);
-      // **Behöver INTE emit VehicleLoaded, streamen gör det automatiskt!**
     } catch (e) {
       emit(VehicleError('Kunde inte uppdatera fordon: $e'));
     }
@@ -50,7 +48,6 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     try {
       await vehicleService.deleteVehicle(event.vehicleId);
       await personService.removeVehicleFromPerson(event.personId, event.vehicleId);
-      // **Behöver INTE emit VehicleLoaded, streamen gör det automatiskt!**
     } catch (e) {
       emit(VehicleError('Kunde inte ta bort fordon: $e'));
     }

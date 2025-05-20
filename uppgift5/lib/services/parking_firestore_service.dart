@@ -21,4 +21,13 @@ class ParkingFirestoreService {
     final doc = await _parkingCollection.doc(parkingId).get();
     return Parking.fromJson(doc.data()!..['id'] = doc.id);
   }
+
+   Stream<List<Parking>> parkingsForPersonStream(String personId) {
+    return _parkingCollection
+        .where('personId', isEqualTo: personId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Parking.fromJson(doc.data()..['id'] = doc.id))
+            .toList());
+  }
 }
