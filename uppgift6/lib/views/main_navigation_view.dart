@@ -20,6 +20,7 @@ import '../blocs/auth_event.dart';
 import 'home_view.dart';
 import 'parking_view.dart';
 import 'history_view.dart';
+import '../repositories/notification_repository.dart';
 // import 'login_view.dart';
 
 class MainNavigationView extends StatefulWidget {
@@ -69,8 +70,10 @@ class _MainNavigationViewState extends State<MainNavigationView> {
         ..add(LoadVehicles(widget.person.id)),
     ),
     BlocProvider<ParkingBloc>(
-      create: (_) => ParkingBloc(parkingService: ParkingFirestoreService())
-        ..add(LoadActiveParkings(widget.person.id)),
+      create: (_) => ParkingBloc(
+        parkingService: ParkingFirestoreService(),
+        notificationRepository: NotificationRepository(),  
+      )..add(LoadActiveParkings(widget.person.id)),
     ),
     BlocProvider<ParkingSpaceBloc>(
       create: (_) => ParkingSpaceBloc(parkingSpaceService: ParkingSpaceFirestoreService())

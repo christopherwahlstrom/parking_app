@@ -13,6 +13,7 @@ import 'models/person.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import './repositories/notification_repository.dart';
 
 Future<Person?> waitForPerson(String uid, {int retries = 5}) async {
   Person? person;
@@ -29,6 +30,7 @@ Future<Person?> waitForPerson(String uid, {int retries = 5}) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationRepository().init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
