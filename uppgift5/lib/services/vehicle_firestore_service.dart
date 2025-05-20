@@ -41,7 +41,15 @@ class VehicleFirestoreService {
       return query.docs.map((doc) => Vehicle.fromJson(doc.data())).toList();
     } catch (e) {
       print("VehicleFirestoreService: Fel vid hämtning av fordon: $e");
-      return []; // Returnera alltid tom lista vid fel
+      return []; 
     }
+  }
+
+  Stream<List<Vehicle>> vehiclesForPersonStream(String ownerId) {
+    return _vehicleCollection
+        .where('ownerId', isEqualTo: ownerId)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Vehicle.fromJson(doc.data())).toList());
   }
 }
