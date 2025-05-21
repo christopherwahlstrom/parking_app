@@ -1,3 +1,17 @@
+## ✅ Sammanfattning av Uppgift 6
+
+I denna uppgift har jag implementerat **lokala notifikationer** i Parking4U-appen med hjälp av Flutter och paketet `flutter_local_notifications`. Notifikationssystemet påminner användaren om pågående parkeringar genom schemalagda notiser. 
+
+Jag har:
+- Installerat och konfigurerat nödvändiga Flutter-paket för notifikationer och tidszonhantering.
+- Utfört plattformsspecifik konfiguration för Android (inklusive rättigheter och build-inställningar).
+- Skapat ett NotificationRepository som hanterar schemaläggning, avbrytning och behörigheter för notiser.
+- Integrerat notifikationshanteringen i appens BLoC-arkitektur, så att notiser automatiskt schemaläggs när en parkering startas och tas bort när parkeringen avslutas.
+- Använt **anpassad ikon och text** i notiserna för att uppfylla VG-kravet på utökad funktionalitet.
+
+Resultatet är en app där användaren får tydliga och informativa påminnelser om sina parkeringar, med korrekt timing och plattformsanpassad implementation.
+
+
 ---
 # Parking4U 🚘 - Uppgift 6: Lokala Notifikationer
 
