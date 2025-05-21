@@ -56,7 +56,6 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
     try {
       await parkingService.stopParking(event.parkingId);
 
-      // === DEMO: Avbryt alla 5 demo-notiser ===
       for (int i = 1; i <= 5; i++) {
         await notificationRepository.cancelNotification(event.parkingId.hashCode + i);
       }
