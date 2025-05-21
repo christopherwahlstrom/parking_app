@@ -135,7 +135,6 @@ class _ParkingViewState extends State<ParkingView> {
                       if (state.parkings.isEmpty) {
                         return const Text('Ingen aktiv parkering.');
                       }
-                      // Hämta parkeringszoner från ParkingSpaceBloc
                       final parkingSpaces = (context.read<ParkingSpaceBloc>().state is ParkingSpaceLoaded)
                           ? (context.read<ParkingSpaceBloc>().state as ParkingSpaceLoaded).parkingSpaces
                           : [];
@@ -144,7 +143,6 @@ class _ParkingViewState extends State<ParkingView> {
                         itemCount: state.parkings.length,
                         itemBuilder: (context, index) {
                           final parking = state.parkings[index];
-                          // Slå upp adressen
                           final space = parkingSpaces.firstWhere(
                             (s) => s.id == parking.parkingSpaceId,
                             orElse: () => ParkingSpace(id: '', adress: 'Okänd plats', prisPerTimme: 0),

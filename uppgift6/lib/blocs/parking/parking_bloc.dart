@@ -54,11 +54,11 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
   Future<void> _onStopParking(StopParking event, Emitter<ParkingState> emit) async {
     emit(ParkingLoading());
     try {
-      await parkingService.stopParking(event.parkingId);
-
       for (int i = 1; i <= 5; i++) {
         await notificationRepository.cancelNotification(event.parkingId.hashCode + i);
       }
+      await parkingService.stopParking(event.parkingId);
+
 
       emit(ParkingStoppedSuccess());
     } catch (e) {
